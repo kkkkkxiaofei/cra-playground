@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, memo } from 'react';
 import styles from './VideoPlayer.module.scss';
 
 const VideoPlayer = ({ src, caption, onPlay }) => {
@@ -30,4 +30,4 @@ const VideoPlayer = ({ src, caption, onPlay }) => {
   )
 }
 
-export default VideoPlayer;
+export default memo(VideoPlayer);

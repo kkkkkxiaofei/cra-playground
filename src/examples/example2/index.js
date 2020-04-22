@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import CoolVideoPlayer from './CoolVideoPlayer/CoolVideoPlayer';
 import styles from './index.module.scss';
 
-const gernateBulltes = (size = 50) => [...Array(size)].map(($, index) => ({ 
+const random = (left, right) => left + Math.random() * (right - left);
+  
+const gernateBulltes = (size = 5) => [...Array(size)].map(($, index) => ({ 
   id: `${index}`,
   content: `bullet${index}`,
-  displayTime: 2 + Math.random() * 10,
-  duration: 2000 + Math.random() * 10000,
+  displayTime: random(1,500),
+  duration: random(5000, 15000),
   color: ['white', 'green', 'red'][Math.floor(Math.random() * 10) % 3],
   fontSize: ['18px', '28px', '38px'][Math.floor(Math.random() * 10) % 3],
   translateY: `${Math.abs(Math.random() * 1000 / 2 - 100)}px`
@@ -76,7 +78,7 @@ const resources = [
 ]
 
 const VideoListPage = () => {
-  const [resource, setResource] = useState({...resources[0], bullets: gernateBulltes(50)});
+  const [resource, setResource] = useState({...resources[0], bullets: gernateBulltes()});
   return (
     <div className={styles.videoListPage}>
       <div className={styles.palyerWrapper}> 
@@ -84,7 +86,7 @@ const VideoListPage = () => {
       </div>
       <div className={styles.videoList}>
         {resources.map((resource, index) => (
-          <div className={styles.placeHolder} onClick={() => setResource(resources[index])}>
+          <div className={styles.placeHolder} onClick={() => setResource({...resources[index], bullets: gernateBulltes()})}>
             <div className={styles.area}>
               {resource.title}
             </div>
