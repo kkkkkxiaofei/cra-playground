@@ -1,0 +1,28 @@
+.videoListPage {
+    margin: 10px auto;
+    width: 1000px;
+}
+
+.videoList {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 10px;
+    column-gap: 10px;
+    .placeHolder {
+        &:hover {
+            opacity: 1;
+            cursor: pointer;    
+        }
+        color: white;
+        background-color: black;
+        opacity: .8;
+        .area {
+            padding-top: calc(56.25% - 18px);
+            transform: translateY(-50%);
+        }
+    }
+}
+
+
+
