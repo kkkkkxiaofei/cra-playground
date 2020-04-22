@@ -8,7 +8,7 @@ const CoolVideoPlayer = ({ src, caption, bullets }) => {
     //todo consider external comments update
     const [videoDescription, setVideoDescription] = useState({
         currentTime: 0,
-        currentBullets: []
+        currentBullets: bullets
     })
     const addComment = content => {
         const { currentTime, currentBullets } = videoDescription;
@@ -19,19 +19,20 @@ const CoolVideoPlayer = ({ src, caption, bullets }) => {
             addComment(e.target.value);
         }
     }
-    const onPlay = currentTime => {
-        const nextBullets = bullets.filter(({ displayTime, duration }) => displayTime < currentTime && currentTime < (displayTime + duration));
-        const { currentBullets } = videoDescription;
-        console.log(currentBullets)
-        setVideoDescription({currentBullets: [...currentBullets, ...nextBullets], currentTime})
-    }
+    
     return (
         <div className={styles.coolVideoBlock}>
-          <VideoPlayer src={src} caption={caption} onPlay={onPlay} />
+          <VideoPlayer 
+            src={src} 
+            caption={caption} 
+            render={currentTime => (
+                <div className={styles.bulletBlock}>
+                    <Bullet bullets={videoDescription.currentBullets} currentTime={currentTime} />
+                </div>
+            )}
+            />
           <div className={styles.bulletBlock}>
-            {
-              videoDescription.currentBullets.map(bullet => <Bullet key={bullet.id} {...bullet} />)
-            }
+
             <div className={styles.actionBlock}>
                 <div className={styles.actionWrapper}>
                     <input onKeyDown={handleKeyDown} style={{ visibility: `${visible ? 'visible' : 'hidden'}` }} />

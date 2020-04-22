@@ -4,10 +4,10 @@ import styles from './index.module.scss';
 
 const random = (left, right) => left + Math.random() * (right - left);
   
-const gernateBulltes = (size = 5) => [...Array(size)].map(($, index) => ({ 
+const gernateBulltes = (size = 5000) => [...Array(size)].map(($, index) => ({ 
   id: `${index}`,
   content: `bullet${index}`,
-  displayTime: random(1,500),
+  displayTime: random(1,3000),
   duration: random(5000, 15000),
   color: ['white', 'green', 'red'][Math.floor(Math.random() * 10) % 3],
   fontSize: ['18px', '28px', '38px'][Math.floor(Math.random() * 10) % 3],
