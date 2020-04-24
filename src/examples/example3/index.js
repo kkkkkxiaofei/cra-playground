@@ -21,23 +21,36 @@ const salaryRules = [
   }
 ];
 
+const formInitValues = {
+  name: 'Neo',
+  salary: '1,000,000'
+}
+
+const Input = props => {
+  const { label, value, onChange } = props;
+  return (
+    <div>
+      <label>{label}</label>
+      <input type="text" value={value} onChange={onChange} />
+    </div>
+  )
+}
+
 const FormValidationExample = props => {
+  const formData = {
+    name: 'Neo',
+    salary: '1,000'
+  };
   return (
     <div className={styles.container}>
-      <Form>
-        <FormItem rule={nameRules[0]} fieldType={"input"} uniqueKey={"1"}>
-          <div>
-            <label>name</label>
-            <input type="text" />
-          </div>
+      <Form initValues={formInitValues}>
+        <FormItem rule={nameRules[0]} fieldType={'input'} uniqueKey={'name'}>
+          <Input label={'name'} />
         </FormItem>
-        <FormItem rule={salaryRules[0]} fieldType={"input"} uniqueKey={"2"}>  
-          <div>
-            <label>salary</label>
-            <input type="text" />
-          </div>
+        <FormItem rule={salaryRules[0]} fieldType={"input"} uniqueKey={'salary'}>  
+          <Input label={'salary'} />
         </FormItem>
-        <FormItem rule={salaryRules[0]} fieldType={"button"} uniqueKey={"3"}> 
+        <FormItem rule={salaryRules[0]} fieldType={"button"} uniqueKey={'submit'}> 
           <button>submit</button>
         </FormItem>
       </Form>

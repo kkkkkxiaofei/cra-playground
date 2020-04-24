@@ -11,38 +11,41 @@ const getValidator = ({ rule }) => {
 
 const FormItem = props => {
   const { children, rule = {}, fieldType, uniqueKey } = props;
-  const { validators, setData} = useContext(FormContext);
+  const { context: { initValues, validators }, trigger, injectValidator } = useContext(FormContext);
   const [errorMessage, setErrorMessage] = useState('');
-  const validate = itemValue => {
-    return getValidator(rule)(itemValue) ? '' : rule.message;
-  };  
-
-  const [valueRecord, setValueRecord] = useState({ pre: "", current: "" });
-
+  const [valueRecord, setValueRecord] = useState({ pre: "", current: initValues[uniqueKey] });
+  
+  const validator = value =>  {
+    const result = getValidator(rule)(value) ? '' : rule.message;
+    setErrorMessage(result);
+  };
   useEffect(() => {
-    if (!validators[uniqueKey]) {
-      const validator = () =>  setErrorMessage(validate(valueRecord.current));
-      setData({...validators, [uniqueKey]: validator});
-    }
-  }, [validators]);
+    console.log(validators);
+    const oldValidator = validators[uniqueKey];
+    const shouldInject = !oldValidator || (oldValidator && valueRecord.current !== oldValidator.value);
+    shouldInject && injectValidator({
+      [uniqueKey]: { 
+        value: valueRecord.current, 
+        validator,
+        fieldType
+      }
+    });
+  }, [valueRecord, validators]);
 
   const handleOnChange = e => setValueRecord({ pre: valueRecord.current, current: e.target.value });
-  const handleSubmit = () => {
-    Object.values(validators).forEach(validator => validator());
-  };
 
   useMemo(() => {
     if (errorMessage || (!errorMessage && valueRecord.pre)) {
-      const result = validate(valueRecord.current);
-      setErrorMessage(result);
+      validator(valueRecord.current);
     }
   }, [valueRecord]);
+
   return (
     <div className={styles.container}>
       {cloneElement(children, {
           ...children.props, 
           onChange: fieldType === 'input' ? handleOnChange : undefined,
-          onClick: fieldType === 'button' ? handleSubmit : undefined, 
+          onClick: fieldType === 'button' ? () => trigger() : undefined, 
           value: valueRecord.current 
         }
       )}
