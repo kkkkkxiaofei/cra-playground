@@ -10,20 +10,29 @@ export const FormContext = React.createContext({
     trigger: $ => $
 });
 
-export const useFormContextData = (initValues = {}) => {
+export const useFormContextData = (initValues = {}, onSuccess, onFail) => {
     const [context, setContext] = useState({
         initValues,
         validators: {}
     });
-
     const trigger = () => {
-        console.log(context.validators)
-        Object.values(context.validators)
-            .forEach(({ value, validator, fieldType }) => fieldType !== 'button' && validator(value));
+        const { validators } = context;
+        const errorMessages = Object.values(validators)
+            .map(({ value, validator }) => validator(value))
+            .filter(message => {
+                return !!message;
+            });
+        if (errorMessages.length > 0) {
+            onFail(errorMessages);
+        } else {
+            const newSnapshot = Object.keys(validators).reduce((result, key) => {
+                result[key] = validators[key].value;
+                return result;
+            }, {})
+            onSuccess(newSnapshot);
+        }
     }
-
     const injectValidator = newValidator => {
-        console.log(newValidator, context.validators)
         setContext({ ...context, validators: {...context.validators, ...newValidator} })
     }
 

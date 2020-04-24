@@ -37,20 +37,18 @@ const Input = props => {
 }
 
 const FormValidationExample = props => {
-  const formData = {
-    name: 'Neo',
-    salary: '1,000'
-  };
+  const onSuccess = newValues => console.log(newValues);
+  const onFail = () => console.log('onFail');
   return (
     <div className={styles.container}>
-      <Form initValues={formInitValues}>
+      <Form initValues={formInitValues} onSuccess={onSuccess} onFail={onFail}>
         <FormItem rule={nameRules[0]} fieldType={'input'} uniqueKey={'name'}>
           <Input label={'name'} />
         </FormItem>
-        <FormItem rule={salaryRules[0]} fieldType={"input"} uniqueKey={'salary'}>  
+        <FormItem rule={salaryRules[0]} fieldType={'input'} uniqueKey={'salary'}>  
           <Input label={'salary'} />
         </FormItem>
-        <FormItem rule={salaryRules[0]} fieldType={"button"} uniqueKey={'submit'}> 
+        <FormItem rule={salaryRules[0]} fieldType={'button'}> 
           <button>submit</button>
         </FormItem>
       </Form>

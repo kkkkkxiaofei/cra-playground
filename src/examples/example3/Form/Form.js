@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FormContext, useFormContextData } from './FormContext';
 
 const Form = props => {
-    const { initValues, children } = props;
+    const { initValues, onSuccess, onFail, children } = props;
     return (
-        <FormContext.Provider value={useFormContextData(initValues)}>
+        <FormContext.Provider value={useFormContextData(initValues, onSuccess, onFail)}>
             {children}
         </FormContext.Provider>
     );
