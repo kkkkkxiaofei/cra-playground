@@ -10,16 +10,26 @@ const getValidator = ({ rule }) => {
 }
 
 const FormItem = props => {
-  const { children, rule = {}, fieldType, uniqueKey = '', initValue } = props;
+  const { children, rule, fieldType, uniqueKey = '', initValue } = props;
   const { context: { validators }, trigger, onSubmit, inject } = useContext(FormContext);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [valueRecord, setValueRecord] = useState({ pre: "", current: initValue });
+  const [valueRecord, setValueRecord] = useState({ pre: '', current: initValue || '' });
+  const [error, setError] = useState('');
   
-  const validator = value =>  {
-    const result = getValidator(rule)(value) ? '' : rule.message;
-    setErrorMessage(result);
-    return result;
-  };
+  const validate = value =>  {
+    if (rule) {
+      const result = getValidator(rule)(value) ? '' : rule.message;
+      console.log(result);
+      setError(result);
+      return result;
+    }
+  }
+
+  useEffect(() => {
+    if (valueRecord.current !== valueRecord.pre) {
+      validate(valueRecord.current);
+    }
+  }, [valueRecord]); 
+
   useEffect(() => {
     if (fieldType && fieldType !== 'button') {
       const oldValidator = validators[uniqueKey];
@@ -27,18 +37,11 @@ const FormItem = props => {
       shouldInject && inject({
         [uniqueKey]: { 
           value: valueRecord.current, 
-          validator
+          validator: validate
         }
       });
     }
   }, [valueRecord, validators]);
-
-  
-  useEffect(() => {
-    if (errorMessage || (!errorMessage && valueRecord.pre)) {
-      validator(valueRecord.current);
-    }
-  }, [valueRecord]);
   
   const handleOnChange = e => setValueRecord({ pre: valueRecord.current, current: e.target.value });
   const handleOnSubmit = () => onSubmit(trigger());
@@ -51,7 +54,7 @@ const FormItem = props => {
           value: valueRecord.current 
         }
       )}
-      {fieldType !== 'button' && <p>{errorMessage}</p>}
+      {fieldType !== 'button' && <p>{error}</p>}
     </div>
   );
 };
