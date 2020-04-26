@@ -10,10 +10,10 @@ const getValidator = ({ rule }) => {
 }
 
 const FormItem = props => {
-  const { children, rule = {}, fieldType, uniqueKey = '' } = props;
-  const { context: { validators }, initValues, trigger, onSubmit, inject } = useContext(FormContext);
+  const { children, rule = {}, fieldType, uniqueKey = '', initValue } = props;
+  const { context: { validators }, trigger, onSubmit, inject } = useContext(FormContext);
   const [errorMessage, setErrorMessage] = useState('');
-  const [valueRecord, setValueRecord] = useState({ pre: "", current: initValues[uniqueKey] });
+  const [valueRecord, setValueRecord] = useState({ pre: "", current: initValue });
   
   const validator = value =>  {
     const result = getValidator(rule)(value) ? '' : rule.message;

@@ -3,15 +3,15 @@ import React, { useState, useEffect } from 'react';
 export const FormContext = React.createContext({
     context: {
         validators: {},
-        initValues: {}
+        init: false
     },
-    setContext: $ => $,
     inject: $ => $,
-    trigger: $ => $
+    trigger: $ => $,
+    onSubmit: $ => $
 });
 
 export const useFormContextData = (hookProps) => {
-    const { initValues = {}, onSubmit, initValidate = false, volumn } = hookProps;
+    const { onSubmit, initValidate = false, volumn } = hookProps;
     const [context, setContext] = useState({
         init: false,
         validators: {}
@@ -52,9 +52,7 @@ export const useFormContextData = (hookProps) => {
     return {
         context,
         inject,
-        setContext: setContext,
         trigger,
-        onSubmit,
-        initValues,
+        onSubmit
     }
 }

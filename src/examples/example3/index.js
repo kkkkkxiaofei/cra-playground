@@ -41,13 +41,23 @@ const FormValidationExample = props => {
   return (
     <div className={styles.container}>
       <Form initValues={formInitValues} onSubmit={onSubmit} initValidate={false}>
-        <FormItem rule={nameRules[0]} fieldType={'input'} uniqueKey={'name'}>
+        <FormItem 
+          rule={nameRules[0]} 
+          fieldType={'input'} 
+          uniqueKey={'name'}
+          initValue={''}
+        >
           <Input label={'name'} />
         </FormItem>
-        <FormItem rule={salaryRules[0]} fieldType={'input'} uniqueKey={'salary'}>  
+        <FormItem 
+          rule={salaryRules[0]} 
+          fieldType={'input'} 
+          uniqueKey={'salary'}
+          initValue={'1,000,000'}
+        >
           <Input label={'salary'} />
         </FormItem>
-        <FormItem rule={salaryRules[0]} fieldType={'button'}> 
+        <FormItem fieldType={'button'}> 
           <button>submit</button>
         </FormItem>
       </Form>
