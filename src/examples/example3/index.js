@@ -37,11 +37,10 @@ const Input = props => {
 }
 
 const FormValidationExample = props => {
-  const onSuccess = newValues => console.log(newValues);
-  const onFail = () => console.log('onFail');
+  const onSubmit = ({ data, errors }) => console.log(data, errors);
   return (
     <div className={styles.container}>
-      <Form initValues={formInitValues} onSuccess={onSuccess} onFail={onFail}>
+      <Form initValues={formInitValues} onSubmit={onSubmit}>
         <FormItem rule={nameRules[0]} fieldType={'input'} uniqueKey={'name'}>
           <Input label={'name'} />
         </FormItem>

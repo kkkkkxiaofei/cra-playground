@@ -11,7 +11,7 @@ const getValidator = ({ rule }) => {
 
 const FormItem = props => {
   const { children, rule = {}, fieldType, uniqueKey = '' } = props;
-  const { context: { initValues, validators }, trigger, injectValidator } = useContext(FormContext);
+  const { context: { initValues, validators }, trigger, onSubmit, injectValidator } = useContext(FormContext);
   const [errorMessage, setErrorMessage] = useState('');
   const [valueRecord, setValueRecord] = useState({ pre: "", current: initValues[uniqueKey] });
   
@@ -33,20 +33,21 @@ const FormItem = props => {
     }
   }, [valueRecord, validators]);
 
-  const handleOnChange = e => setValueRecord({ pre: valueRecord.current, current: e.target.value });
-
+  
   useMemo(() => {
     if (errorMessage || (!errorMessage && valueRecord.pre)) {
       validator(valueRecord.current);
     }
   }, [valueRecord]);
-
+  
+  const handleOnChange = e => setValueRecord({ pre: valueRecord.current, current: e.target.value });
+  const handleOnSubmit = () => onSubmit(trigger());
   return (
     <div className={styles.container}>
       {cloneElement(children, {
           ...children.props, 
           onChange: fieldType === 'input' ? handleOnChange : undefined,
-          onClick: fieldType === 'button' ? () => trigger() : undefined, 
+          onClick: fieldType === 'button' ? handleOnSubmit : undefined, 
           value: valueRecord.current 
         }
       )}
