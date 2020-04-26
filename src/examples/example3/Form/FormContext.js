@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export const FormContext = React.createContext({
     context: {
@@ -10,9 +10,11 @@ export const FormContext = React.createContext({
     trigger: $ => $
 });
 
-export const useFormContextData = (initValues = {}, onSubmit) => {
+export const useFormContextData = (hookProps) => {
+    const { initValues = {}, onSubmit, initValidate = false, volumn } = hookProps;
     const [context, setContext] = useState({
         initValues,
+        init: false,
         validators: {}
     });
     const trigger = () => {
@@ -25,21 +27,28 @@ export const useFormContextData = (initValues = {}, onSubmit) => {
             result[key] = validators[key].value;
             return result;
         }, {})
-        console.log(errors, newSnapshot)
         return {
             data: newSnapshot,
             errors
         }
     }
     const injectValidator = newValidator => {
+        const validators = {
+            ...context.validators, 
+            ...newValidator
+        }
         setContext({ 
             ...context, 
-            validators: {
-                ...context.validators, 
-                ...newValidator
-            } 
+            init: Object.keys(validators).length === volumn - 1,
+            validators 
         })
     }
+    
+    useEffect(() => {
+        if (context.init && initValidate) {
+            trigger();
+        }
+    }, [context.init]);
 
     return {
         context,

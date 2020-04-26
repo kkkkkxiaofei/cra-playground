@@ -34,7 +34,7 @@ const FormItem = props => {
   }, [valueRecord, validators]);
 
   
-  useMemo(() => {
+  useEffect(() => {
     if (errorMessage || (!errorMessage && valueRecord.pre)) {
       validator(valueRecord.current);
     }

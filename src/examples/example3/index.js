@@ -22,7 +22,7 @@ const salaryRules = [
 ];
 
 const formInitValues = {
-  name: 'Neo',
+  name: '',
   salary: '1,000,000'
 }
 
@@ -40,7 +40,7 @@ const FormValidationExample = props => {
   const onSubmit = ({ data, errors }) => console.log(data, errors);
   return (
     <div className={styles.container}>
-      <Form initValues={formInitValues} onSubmit={onSubmit}>
+      <Form initValues={formInitValues} onSubmit={onSubmit} initValidate={false}>
         <FormItem rule={nameRules[0]} fieldType={'input'} uniqueKey={'name'}>
           <Input label={'name'} />
         </FormItem>
