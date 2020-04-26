@@ -6,14 +6,13 @@ export const FormContext = React.createContext({
         initValues: {}
     },
     setContext: $ => $,
-    injectValidator: $ => $,
+    inject: $ => $,
     trigger: $ => $
 });
 
 export const useFormContextData = (hookProps) => {
     const { initValues = {}, onSubmit, initValidate = false, volumn } = hookProps;
     const [context, setContext] = useState({
-        initValues,
         init: false,
         validators: {}
     });
@@ -32,7 +31,7 @@ export const useFormContextData = (hookProps) => {
             errors
         }
     }
-    const injectValidator = newValidator => {
+    const inject = newValidator => {
         const validators = {
             ...context.validators, 
             ...newValidator
@@ -52,9 +51,10 @@ export const useFormContextData = (hookProps) => {
 
     return {
         context,
-        injectValidator,
+        inject,
         setContext: setContext,
         trigger,
         onSubmit,
+        initValues,
     }
 }

@@ -11,7 +11,7 @@ const getValidator = ({ rule }) => {
 
 const FormItem = props => {
   const { children, rule = {}, fieldType, uniqueKey = '' } = props;
-  const { context: { initValues, validators }, trigger, onSubmit, injectValidator } = useContext(FormContext);
+  const { context: { validators }, initValues, trigger, onSubmit, inject } = useContext(FormContext);
   const [errorMessage, setErrorMessage] = useState('');
   const [valueRecord, setValueRecord] = useState({ pre: "", current: initValues[uniqueKey] });
   
@@ -24,7 +24,7 @@ const FormItem = props => {
     if (fieldType && fieldType !== 'button') {
       const oldValidator = validators[uniqueKey];
       const shouldInject = !oldValidator || (oldValidator && valueRecord.current !== oldValidator.value);
-      shouldInject && injectValidator({
+      shouldInject && inject({
         [uniqueKey]: { 
           value: valueRecord.current, 
           validator
