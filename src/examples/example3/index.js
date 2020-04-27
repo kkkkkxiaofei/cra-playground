@@ -5,7 +5,7 @@ import styles from './index.module.scss';
 
 const nameRules = [
   {
-    rule: {
+    descriptor: {
       required: true
     },
     message: 'name is required'
@@ -14,10 +14,24 @@ const nameRules = [
 
 const salaryRules = [
   {
-    rule: {
+    descriptor: {
       required: true
     },
+    impact: 'company',
     message: 'salary is mandorary'
+  }
+];
+
+const companyRules = [
+  {
+    descriptor: snapshot => {
+      const { salary, company } = snapshot;
+      if (salary > 100) {
+        return company;
+      }
+      return true;
+    },
+    message: 'company is required if salary is more than 100'
   }
 ];
 
@@ -48,9 +62,16 @@ const FormValidationExample = props => {
           rule={salaryRules[0]} 
           fieldType={'input'} 
           uniqueKey={'salary'}
-          initValue={'1,000,000'}
+          initValue={'200'}
         >
           <Input label={'salary'} />
+        </FormItem>
+        <FormItem 
+          rule={companyRules[0]} 
+          fieldType={'input'} 
+          uniqueKey={'company'}
+        >
+          <Input label={'company'} />
         </FormItem>
         <FormItem fieldType={'button'}> 
           <button>submit</button>
