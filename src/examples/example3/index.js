@@ -45,11 +45,18 @@ const Input = props => {
   )
 }
 
+const Button = props => {
+  const { onClick, name, disabled } = props; 
+  return (<div>
+    <button disabled={disabled} onClick={onClick}>{name}</button>
+  </div>)
+}
+
 const FormValidationExample = props => {
-  const onSubmit = ({ data, errors }) => console.log(data, errors);
+  const onSubmit = (snapshot) => console.log(snapshot);
   return (
     <div className={styles.container}>
-      <Form onSubmit={onSubmit} initValidate={true}>
+      <Form onSubmit={onSubmit} initValidate={false}>
         <FormItem 
           rule={nameRules[0]} 
           fieldType={'input'} 
@@ -74,7 +81,7 @@ const FormValidationExample = props => {
           <Input label={'company'} />
         </FormItem>
         <FormItem fieldType={'button'}> 
-          <button>submit</button>
+          <Button name={'Submit'} />
         </FormItem>
       </Form>
     </div>

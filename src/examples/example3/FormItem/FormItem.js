@@ -13,8 +13,9 @@ const FormItem = props => {
   const { children, rule, fieldType, uniqueKey = '', initValue } = props;
   const { 
     context: { 
-      validators,
+      validators, 
       snapshot, 
+      hasErrors 
     }, 
     trigger, 
     onSubmit, 
@@ -27,14 +28,13 @@ const FormItem = props => {
       const { descriptor, message } = rule;
       const result = typeof descriptor === 'function' ? descriptor(snapshot) : getValidator(descriptor)(snapshot[uniqueKey]);
       const erroMessage = result ? '' : message
-      setError(erroMessage);
       //todo test
       return erroMessage;
     }
   }
   useEffect(() => {
     if (valueRecord.current !== valueRecord.pre) {
-      validate({ ...snapshot, [uniqueKey]: valueRecord.current })
+      setError(validate({ ...snapshot, [uniqueKey]: valueRecord.current }));
     }
   }, [valueRecord]);
 
@@ -46,20 +46,22 @@ const FormItem = props => {
         uniqueKey,
         value: { ...snapshot, [uniqueKey]: valueRecord.current },
         validator: validate,
+        cb: setError,
         impact: rule.impact
       });
     }
   }, [valueRecord, validators, snapshot]);
   
   const handleOnChange = e => setValueRecord({ pre: valueRecord.current, current: e.target.value });
-  const handleOnSubmit = () => onSubmit(trigger());
+  const handleOnSubmit = () => onSubmit(snapshot);
   return (
     <div className={styles.container}>
       {cloneElement(children, {
           ...children.props, 
           onChange: fieldType === 'input' ? handleOnChange : undefined,
           onClick: fieldType === 'button' ? handleOnSubmit : undefined, 
-          value: valueRecord.current 
+          value: valueRecord.current,
+          disabled: fieldType === 'button' ? hasErrors : undefined,
         }
       )}
       {fieldType !== 'button' && <p>{error}</p>}

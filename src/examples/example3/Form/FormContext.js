@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 export const FormContext = React.createContext({
     context: {
         validators: {},
         init: false,
+        hasErrors: false,
         snapshot: {},
     },
     inject: $ => $,
@@ -15,30 +16,37 @@ export const useFormContextData = (hookProps) => {
     const { onSubmit, initValidate = false, volumn } = hookProps;
     const [context, setContext] = useState({
         init: false,
+        hasErrors: false,
         validators: {},
         snapshot: {},
     });
-    const trigger = (lastedContext = context) => {
+    const trigger = (lastedContext = context, needCallback = true) => {
         const { validators, snapshot } = lastedContext;
         const errors = Object.values(validators)
-            .map(({ validator }) => validator(snapshot))
+            .map(({ validator, cb }) => {
+                const message = validator(snapshot);
+                needCallback && cb(message);
+                return message;
+            })
             .filter(message => !!message);
         
-        return {
+        const result = {
             data: snapshot,
             errors
         };
+
+        return result;
     }
     const inject = newValidator => {
+        const { uniqueKey, value, validator, cb } = newValidator;
         const validators = {
             ...context.validators,
-            [newValidator.uniqueKey]: { ...newValidator }
+            [uniqueKey]: { value, validator, cb }
         };
-
-        const newSnapshot = Object.keys(validators).reduce((result, key) => {
-            result[key] = validators[key].value[key];
-            return result;
-        }, {});
+        const newSnapshot = Object.keys(validators).reduce((result, uniqueKey) => ({
+            ...result,
+            [uniqueKey]: validators[uniqueKey].value[uniqueKey]
+        }), {});
 
         const newContext = { 
             ...context, 
@@ -47,12 +55,12 @@ export const useFormContextData = (hookProps) => {
             snapshot: newSnapshot
         };
         
-        // after initinig, if new injection has impacts, then trigger all
-        if (context.init && newValidator.impact) {
-            trigger(newContext);
-        }
-
-        setContext(newContext);
+        // TODO: performance test
+        const { errors } = trigger(newContext);
+        setContext({
+            ...newContext,
+            hasErrors: errors.length > 0
+        });
     };
     
     useEffect(() => {
@@ -64,6 +72,6 @@ export const useFormContextData = (hookProps) => {
         context,
         inject,
         trigger,
-        onSubmit
+        onSubmit,
     }
 }
