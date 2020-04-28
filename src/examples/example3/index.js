@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Form from './Form/Form';
 import FormItem from './FormItem/FormItem';
 import styles from './index.module.scss';
@@ -53,15 +53,20 @@ const Button = props => {
 }
 
 const FormValidationExample = props => {
-  const onSubmit = (snapshot) => console.log(snapshot);
+  const [editable, setEditable] = useState(false);
   return (
     <div className={styles.container}>
-      <Form onSubmit={onSubmit} initValidate={false}>
+      <div>
+        <button onClick={() => setEditable(true)}>Edit</button>
+        <button onClick={() => setEditable(false)}>Cancel</button>
+      </div>
+      <Form onSubmit={(snapshot) => console.log(snapshot)} initValidate={false}>
         <FormItem 
           rule={nameRules[0]} 
           fieldType={'input'} 
           uniqueKey={'name'}
           initValue={''}
+          editable={editable}
         >
           <Input label={'name'} />
         </FormItem>
@@ -70,13 +75,15 @@ const FormValidationExample = props => {
           fieldType={'input'} 
           uniqueKey={'salary'}
           initValue={'200'}
+          editable={editable}
         >
-          <Input label={'salary'} />
+          <Input label={'salary'}  />
         </FormItem>
         <FormItem 
           rule={companyRules[0]} 
           fieldType={'input'} 
           uniqueKey={'company'}
+          editable={editable}
         >
           <Input label={'company'} />
         </FormItem>

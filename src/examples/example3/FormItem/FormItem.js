@@ -10,7 +10,14 @@ const getValidator = ({ required }) => {
 }
 
 const FormItem = props => {
-  const { children, rule, fieldType, uniqueKey = '', initValue } = props;
+  const { 
+    children, 
+    rule, 
+    fieldType, 
+    uniqueKey = '', 
+    initValue, 
+    editable = true 
+  } = props;
   const { 
     context: { 
       validators, 
@@ -51,20 +58,25 @@ const FormItem = props => {
       });
     }
   }, [valueRecord, validators, snapshot]);
-  
+  console.log(uniqueKey, '=====')
   const handleOnChange = e => setValueRecord({ pre: valueRecord.current, current: e.target.value });
   const handleOnSubmit = () => onSubmit(snapshot);
+
+  const render = () => cloneElement(children, {
+    ...children.props, 
+    onChange: fieldType === 'input' ? handleOnChange : undefined,
+    onClick: fieldType === 'button' ? handleOnSubmit : undefined, 
+    value: valueRecord.current,
+    disabled: fieldType === 'button' ? hasErrors : undefined,
+  });
+  console.log(editable)
   return (
     <div className={styles.container}>
-      {cloneElement(children, {
-          ...children.props, 
-          onChange: fieldType === 'input' ? handleOnChange : undefined,
-          onClick: fieldType === 'button' ? handleOnSubmit : undefined, 
-          value: valueRecord.current,
-          disabled: fieldType === 'button' ? hasErrors : undefined,
-        }
-      )}
-      {fieldType !== 'button' && <p>{error}</p>}
+      <div style={{ display: `${ editable ? 'block' : 'none' }` }}>
+        {render()}
+        {fieldType !== 'button' && <p>{error}</p>}
+      </div>
+      {!editable && <div>{valueRecord.current}</div>}
     </div>
   );
 };
