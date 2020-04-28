@@ -16,7 +16,8 @@ const FormItem = props => {
     fieldType, 
     uniqueKey = '', 
     initValue, 
-    editable = true 
+    editable = true,
+    checkVisible = $ => true 
   } = props;
   const { 
     context: { 
@@ -68,6 +69,11 @@ const FormItem = props => {
     value: valueRecord.current,
     disabled: fieldType === 'button' ? hasErrors : undefined,
   });
+
+  if (!checkVisible(snapshot)) {
+    return null;
+  }
+
   return (
     <div className={styles.container}>
       <div style={{ display: `${ editable ? 'block' : 'none' }` }}>
