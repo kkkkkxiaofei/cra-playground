@@ -26,10 +26,11 @@ const salaryRules = [
   }
 ];
 
-const Demo1 = props => {
+const Demo1 = (props) => {
+  const { onSubmit = snapshot => console.log(snapshot) } = props;
   return (
     <div className={styles.container}>
-      <Form onSubmit={(snapshot) => console.log(snapshot)} initValidate={true}>
+      <Form onSubmit={onSubmit} initValidate={true}>
         <FormItem 
           rule={nameRules[0]} 
           fieldType={'input'} 
