@@ -18,11 +18,11 @@ const nameRules = [
 
 const salaryRules = [
   {
-    descriptor: {
-      required: true
+    descriptor: snapshot => {
+      const { salary } = snapshot;
+      return !isNaN(salary);      
     },
-    impact: 'company',
-    message: 'salary is mandorary'
+    message: 'salary must be number'
   }
 ];
 
@@ -40,20 +40,15 @@ const companyRules = [
 ];
 
 const Demo2 = props => {
-  const [editable, setEditable] = useState(false);
   return (
     <div className={styles.container}>
-      <div>
-        <button onClick={() => setEditable(true)}>Edit</button>
-        <button onClick={() => setEditable(false)}>Cancel</button>
-      </div>
-      <Form onSubmit={(snapshot) => console.log(snapshot)} initValidate={false}>
+      
+      <Form onSubmit={(snapshot) => console.log(snapshot)} initValidate={true}>
         <FormItem 
           rule={nameRules[0]} 
           fieldType={'input'} 
           uniqueKey={'name'}
           initValue={''}
-          editable={editable}
         >
           <Input label={'name'} />
         </FormItem>
@@ -62,7 +57,6 @@ const Demo2 = props => {
           fieldType={'input'} 
           uniqueKey={'salary'}
           initValue={'200'}
-          editable={editable}
         >
           <Input label={'salary'}  />
         </FormItem>
@@ -70,7 +64,6 @@ const Demo2 = props => {
           rule={companyRules[0]} 
           fieldType={'input'} 
           uniqueKey={'company'}
-          editable={editable}
         >
           <Input label={'company'} />
         </FormItem>

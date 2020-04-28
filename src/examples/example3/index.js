@@ -9,10 +9,10 @@ const FormValidationExamples = props => {
         <h1>Demo1</h1>
         <Demo1  />
       </div>
-      {/* <div className={styles.demo}>
+      <div className={styles.demo}>
         <h1>Demo2</h1>
         <Demo2  />
-      </div> */}
+      </div>
     </div>
   )
 };
