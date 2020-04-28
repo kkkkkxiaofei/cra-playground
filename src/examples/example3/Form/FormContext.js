@@ -13,7 +13,12 @@ export const FormContext = React.createContext({
 });
 
 export const useFormContextData = (hookProps) => {
-    const { onSubmit, initValidate = false, volumn } = hookProps;
+    const { 
+        onSubmit, 
+        initValidate = false, 
+        volumn,
+        onSnapshotUpdated = $ => $,
+    } = hookProps;
     const [context, setContext] = useState({
         init: false,
         hasErrors: false,
@@ -61,6 +66,8 @@ export const useFormContextData = (hookProps) => {
             ...newContext,
             hasErrors: errors.length > 0
         });
+
+        onSnapshotUpdated(newSnapshot);
     };
     
     useEffect(() => {
