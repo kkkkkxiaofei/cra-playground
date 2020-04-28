@@ -58,7 +58,6 @@ const FormItem = props => {
       });
     }
   }, [valueRecord, validators, snapshot]);
-  console.log(uniqueKey, '=====')
   const handleOnChange = e => setValueRecord({ pre: valueRecord.current, current: e.target.value });
   const handleOnSubmit = () => onSubmit(snapshot);
 
@@ -69,7 +68,6 @@ const FormItem = props => {
     value: valueRecord.current,
     disabled: fieldType === 'button' ? hasErrors : undefined,
   });
-  console.log(editable)
   return (
     <div className={styles.container}>
       <div style={{ display: `${ editable ? 'block' : 'none' }` }}>
