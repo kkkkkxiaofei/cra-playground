@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import Form from '../Form/Form';
-import FormItem from '../FormItem/FormItem';
+import { Form, FormItem } from '../Form';
 import styles from '../index.module.scss';
 import {
   Button,

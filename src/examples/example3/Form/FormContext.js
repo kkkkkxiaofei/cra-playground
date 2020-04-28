@@ -44,10 +44,20 @@ export const useFormContextData = (hookProps) => {
     }
     const inject = newValidator => {
         const { uniqueKey, value, validator, cb } = newValidator;
-        const validators = {
-            ...context.validators,
-            [uniqueKey]: { value, validator, cb }
-        };
+        let validators = {};
+        
+        if (!!validator) {
+            //inject
+            validators = {
+                ...context.validators,
+                [uniqueKey]: { value, validator, cb }
+            }
+        } else {
+            //uninject
+            const { [uniqueKey]: $, ...others } = validators;
+            validators = others;
+        }
+        
         const newSnapshot = Object.keys(validators).reduce((result, uniqueKey) => ({
             ...result,
             [uniqueKey]: validators[uniqueKey].value[uniqueKey]

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, cloneElement, useContext, useEffect } from 'react';
 import styles from './FormItem.module.scss';
-import { FormContext } from '../Form/FormContext';
+import { FormContext } from '../FormContext';
 
 const getValidator = ({ required }) => {
   if (required) {
@@ -25,7 +25,6 @@ const FormItem = props => {
       snapshot, 
       hasErrors 
     }, 
-    trigger, 
     onSubmit, 
     inject 
   } = useContext(FormContext);
