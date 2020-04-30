@@ -9,10 +9,7 @@ import Demo1 from './Demo1';
 
 const Demo4 = props => {
   const [forms, setForms] = useState([]);
-  const [snapshots, setSnapshots] = useState({});
-  
-  console.log(snapshots);
-  
+  const [snapshots, setSnapshots] = useState({});  
   const addHandler = () => setForms([...forms, Demo1]);
   const saveHandler = () => {
     console.log(snapshots);

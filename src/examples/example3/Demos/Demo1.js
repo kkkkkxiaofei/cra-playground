@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Form, FormItem } from '../Form';
 import styles from '../index.module.scss';
 import {
-  Button,
   Input
 } from './Components';
 
@@ -26,10 +25,14 @@ const salaryRules = [
 ];
 
 const Demo1 = (props) => {
-  const { onSubmit = snapshot => console.log(snapshot), ...others } = props;
+  const { onSubmit = snapshot => console.log(snapshot, 'onsubmit'), ...others } = props;
   return (
     <div className={styles.container}>
-      <Form onSubmit={onSubmit} initValidate={true} {...others}>
+      <Form 
+        onSubmit={onSubmit} 
+        initValidate={true} 
+        {...others}
+      >
         <FormItem 
           rule={nameRules[0]} 
           fieldType={'input'} 
@@ -45,9 +48,6 @@ const Demo1 = (props) => {
           initValue={'200'}
         >
           <Input label={'salary'}  />
-        </FormItem>
-        <FormItem fieldType={'button'}> 
-          <Button name={'Submit'} />
         </FormItem>
       </Form>
     </div>

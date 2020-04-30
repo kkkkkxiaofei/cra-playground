@@ -17,7 +17,7 @@ export const useFormContextData = (hookProps) => {
         onSubmit, 
         initValidate = false, 
         volumn,
-        onSnapshotUpdated = $ => $,
+        onSnapshotUpdated = $ => $
     } = hookProps;
     const [context, setContext] = useState({
         init: false,

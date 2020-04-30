@@ -39,10 +39,16 @@ const companyRules = [
 ];
 
 const Demo3 = props => {
+  const { onSubmit = snapshot => console.log(snapshot), ...others } = props;
   return (
     <div className={styles.container}>
       
-      <Form onSubmit={(snapshot) => console.log(snapshot)} initValidate={false}>
+      <Form 
+        onSubmit={onSubmit} 
+        initValidate={true} 
+        {...others}
+        Ok={<Button name={'Submit'} />}
+      >
         <FormItem 
           rule={nameRules[0]} 
           fieldType={'input'} 
@@ -65,9 +71,6 @@ const Demo3 = props => {
           uniqueKey={'company'}
         >
           <Input label={'company'} />
-        </FormItem>
-        <FormItem fieldType={'button'}> 
-          <Button name={'Submit'} />
         </FormItem>
       </Form>
     </div>

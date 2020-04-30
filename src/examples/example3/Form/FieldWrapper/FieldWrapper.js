@@ -12,7 +12,6 @@ const FieldWrapper = props => {
   const { 
     children, 
     rule, 
-    fieldType, 
     uniqueKey = '', 
     initValue, 
     editable = true,
@@ -42,34 +41,29 @@ const FieldWrapper = props => {
   }, [valueRecord]);
 
   useEffect(() => {
-    if (fieldType && fieldType !== 'button') {
-      const oldValidator = validators[uniqueKey]; 
-      const shouldInject = !oldValidator || (oldValidator && valueRecord.current !== oldValidator.value[uniqueKey]);
-      shouldInject && inject({
-        uniqueKey,
-        value: { ...snapshot, [uniqueKey]: valueRecord.current },
-        validator: validate,
-        cb: setError,
-        impact: rule.impact
-      });
-    }
+    const oldValidator = validators[uniqueKey]; 
+    const shouldInject = !oldValidator || (oldValidator && valueRecord.current !== oldValidator.value[uniqueKey]);
+    shouldInject && inject({
+      uniqueKey,
+      value: { ...snapshot, [uniqueKey]: valueRecord.current },
+      validator: validate,
+      cb: setError,
+      impact: rule.impact
+    });
   }, [valueRecord, validators, snapshot]);
   const handleOnChange = e => setValueRecord({ pre: valueRecord.current, current: e.target.value });
-  const handleOnSubmit = () => onSubmit(snapshot);
 
   const render = () => cloneElement(children, {
     ...children.props, 
-    onChange: fieldType === 'input' ? handleOnChange : undefined,
-    onClick: fieldType === 'button' ? handleOnSubmit : undefined, 
+    onChange: handleOnChange,
     value: valueRecord.current,
-    disabled: fieldType === 'button' ? hasErrors : undefined,
   });
 
   return (
     <div className={styles.container}>
       <div style={{ display: `${ editable ? 'block' : 'none' }` }}>
         {render()}
-        {fieldType !== 'button' && <p>{error}</p>}
+        {<p>{error}</p>}
       </div>
       {!editable && <div>{valueRecord.current}</div>}
     </div>

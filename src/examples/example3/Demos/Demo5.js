@@ -34,7 +34,12 @@ const Demo5 = (props) => {
   const { onSubmit = snapshot => console.log(snapshot), ...others } = props;
   return (
     <div className={styles.container}>
-      <Form onSubmit={onSubmit} initValidate={true} {...others}>
+      <Form 
+        onSubmit={onSubmit} 
+        initValidate={true} 
+        {...others}
+        Ok={<Button name={'Submit'} />}
+      >
         <FormItem 
           rule={nameRules[0]} 
           fieldType={'input'} 
@@ -51,9 +56,6 @@ const Demo5 = (props) => {
           initValue={'200'}
         >
           <Input label={'salary'}  />
-        </FormItem>
-        <FormItem fieldType={'button'}> 
-          <Button name={'Submit'} />
         </FormItem>
       </Form>
     </div>
