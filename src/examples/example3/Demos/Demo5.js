@@ -37,23 +37,20 @@ const Demo5 = (props) => {
       <Form 
         onSubmit={onSubmit} 
         initValidate={true} 
-        {...others}
+        initValues={{ salary: 200 }}
         Ok={<Button name={'Submit'} />}
+        {...others}
       >
         <FormItem 
           rule={nameRules[0]} 
-          fieldType={'input'} 
           uniqueKey={'name'}
-          initValue={''}
           checkVisible={checkVisible}
         >
           <Input label={'name'} />
         </FormItem>
         <FormItem 
           rule={salaryRules[0]} 
-          fieldType={'input'} 
           uniqueKey={'salary'}
-          initValue={'200'}
         >
           <Input label={'salary'}  />
         </FormItem>

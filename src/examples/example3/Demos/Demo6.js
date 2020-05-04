@@ -38,15 +38,15 @@ const companyRules = [
   }
 ];
 
-const Demo2 = props => {
+const Demo6 = props => {
   const { onSubmit = snapshot => console.log(snapshot), ...others } = props;
   return (
     <div className={styles.container}>
       <Form 
         onSubmit={onSubmit} 
         initValidate={true} 
-        initValues={{ salary: 200 }}
         Ok={<Button name={'Submit'} />}
+        Cancel={<Button name={'Cancel'} />}
         {...others}
       >
         <FormItem 
@@ -72,4 +72,4 @@ const Demo2 = props => {
   );
 };
 
-export default Demo2;
+export default Demo6;

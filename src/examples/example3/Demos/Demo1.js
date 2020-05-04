@@ -30,22 +30,19 @@ const Demo1 = (props) => {
     <div className={styles.container}>
       <Form 
         onSubmit={onSubmit} 
-        initValidate={true} 
+        initValidate={true}
+        initValues={{ salary: 200 }}
         {...others}
       >
         <FormItem 
           rule={nameRules[0]} 
-          fieldType={'input'} 
           uniqueKey={'name'}
-          initValue={''}
         >
           <Input label={'name'} />
         </FormItem>
         <FormItem 
           rule={salaryRules[0]} 
-          fieldType={'input'} 
           uniqueKey={'salary'}
-          initValue={'200'}
         >
           <Input label={'salary'}  />
         </FormItem>

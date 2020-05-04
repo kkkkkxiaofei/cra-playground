@@ -3,7 +3,6 @@ import { Form, FormItem } from '../Form';
 import styles from '../index.module.scss';
 import {
   Button,
-  Input
 } from './Components';
 import Demo1 from './Demo1';
 

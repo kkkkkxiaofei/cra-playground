@@ -1,11 +1,11 @@
 import React from 'react';
 
 export const Input = props => {
-  const { label, value, onChange } = props;
+  const { label, value, onChange, fieldRef } = props;
   return (
     <div>
       <label>{label}</label>
-      <input type="text" value={value} onChange={onChange} />
+      <input ref={fieldRef}type="text" value={value} onChange={onChange} />
     </div>
   )
 }

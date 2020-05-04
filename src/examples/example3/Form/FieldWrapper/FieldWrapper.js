@@ -1,4 +1,4 @@
-import React, { useState, useMemo, cloneElement, useContext, useEffect } from 'react';
+import React, { useState, cloneElement, useEffect, useRef } from 'react';
 import styles from './FieldWrapper.module.scss';
 
 const getValidator = ({ required }) => {
@@ -13,17 +13,16 @@ const FieldWrapper = props => {
     children, 
     rule, 
     uniqueKey = '', 
-    initValue, 
     editable = true,
     context: { 
-        validators, 
-        snapshot, 
-        hasErrors 
-      }, 
-    onSubmit, 
+      validators,
+      snapshot,
+    },
+    initValues,
     inject 
   } = props;
-  const [valueRecord, setValueRecord] = useState({ pre: '', current: initValue || '' });
+  const fieldRef = useRef();
+  const [valueRecord, setValueRecord] = useState({ pre: '', current: initValues[uniqueKey] || '' });
   const [error, setError] = useState('');
   const validate = snapshot =>  {
     if (rule) {
@@ -39,7 +38,6 @@ const FieldWrapper = props => {
       setError(validate({ ...snapshot, [uniqueKey]: valueRecord.current }));
     }
   }, [valueRecord]);
-
   useEffect(() => {
     const oldValidator = validators[uniqueKey]; 
     const shouldInject = !oldValidator || (oldValidator && valueRecord.current !== oldValidator.value[uniqueKey]);
@@ -48,7 +46,8 @@ const FieldWrapper = props => {
       value: { ...snapshot, [uniqueKey]: valueRecord.current },
       validator: validate,
       cb: setError,
-      impact: rule.impact
+      fieldRef,
+      reset: setValueRecord,
     });
   }, [valueRecord, validators, snapshot]);
   const handleOnChange = e => setValueRecord({ pre: valueRecord.current, current: e.target.value });
@@ -57,6 +56,7 @@ const FieldWrapper = props => {
     ...children.props, 
     onChange: handleOnChange,
     value: valueRecord.current,
+    fieldRef
   });
 
   return (

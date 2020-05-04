@@ -7,9 +7,11 @@ export const FormContext = React.createContext({
         hasErrors: false,
         snapshot: {},
     },
+    initValues: {},
     inject: $ => $,
     trigger: $ => $,
-    onSubmit: $ => $
+    onSubmit: $ => $,
+    discard: $ => $,
 });
 
 export const useFormContextData = (hookProps) => {
@@ -17,16 +19,28 @@ export const useFormContextData = (hookProps) => {
         onSubmit, 
         initValidate = false, 
         volumn,
-        onSnapshotUpdated = $ => $
+        onSnapshotUpdated = $ => $,
+        initValues = {},
     } = hookProps;
+    
     const [context, setContext] = useState({
         init: false,
         hasErrors: false,
         validators: {},
         snapshot: {},
     });
-    const trigger = (lastedContext = context, needCallback = true) => {
-        const { validators, snapshot } = lastedContext;
+
+    const discard = () => {
+        const { validators } = context;
+        Object.values(validators)
+            .forEach(({ fieldRef, uniqueKey, reset }) => {
+                reset({ pre: '', current: initValues[uniqueKey] || '' });
+                fieldRef.current.value = initValues[uniqueKey] || '';
+            });
+    };
+
+    const trigger = (lastestContext = context, needCallback = true) => {
+        const { validators, snapshot } = lastestContext;
         const errors = Object.values(validators)
             .map(({ validator, cb }) => {
                 const message = validator(snapshot);
@@ -43,14 +57,14 @@ export const useFormContextData = (hookProps) => {
         return result;
     }
     const inject = newValidator => {
-        const { uniqueKey, value, validator, cb } = newValidator;
+        const { uniqueKey, value, validator, cb, fieldRef, reset } = newValidator;
         let validators = {};
         
         if (!!validator) {
             //inject
             validators = {
                 ...context.validators,
-                [uniqueKey]: { value, validator, cb }
+                [uniqueKey]: { value, validator, cb, fieldRef, reset }
             }
         } else {
             //uninject
@@ -65,7 +79,7 @@ export const useFormContextData = (hookProps) => {
 
         const newContext = { 
             ...context, 
-            init: Object.keys(validators).length === volumn - 1,
+            init: Object.keys(validators).length === volumn,
             validators,
             snapshot: newSnapshot
         };
@@ -85,10 +99,13 @@ export const useFormContextData = (hookProps) => {
             trigger(context);
         }
     }, [context]);
+
     return {
         context,
         inject,
         trigger,
         onSubmit,
+        initValues,
+        discard
     }
 }

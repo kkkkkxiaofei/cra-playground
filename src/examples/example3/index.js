@@ -5,7 +5,8 @@ import {
   Demo2, 
   Demo3, 
   Demo4,
-  Demo5, 
+  Demo5,
+  Demo6,
 } from './Demos';
 
 const FormValidationExamples = props => {
@@ -30,6 +31,10 @@ const FormValidationExamples = props => {
       <div className={styles.demo}>
         <h1>Demo5</h1>
         <Demo5  />
+      </div>
+      <div className={styles.demo}>
+        <h1>Demo6</h1>
+        <Demo6 />
       </div>
     </div>
   )
