@@ -32,10 +32,6 @@ const FormValidationExamples = props => {
         <h2>Demo5</h2>
         <div className={styles.demo}><Demo5  /></div>
       </div>
-      <div className={styles.demoWrapper}>
-        <h2>Demo6</h2>
-        <div className={styles.demo}v><Demo6 /></div>
-      </div>
     </div>
   )
 };

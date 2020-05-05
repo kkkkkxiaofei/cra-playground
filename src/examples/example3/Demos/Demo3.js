@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, FormItem } from '../Form';
 import styles from '../index.module.scss';
 import {
-  Button,
+  Ok,
   Input
 } from './Components';
 
@@ -21,7 +21,8 @@ const salaryRules = [
       const { salary } = snapshot;
       return !isNaN(salary);      
     },
-    message: 'salary must be number'
+    message: 'salary must be number',
+    impact: 'company'
   }
 ];
 
@@ -44,7 +45,7 @@ const Demo3 = props => {
     <div className={styles.container}>
       <Form 
         onSubmit={onSubmit} 
-        Ok={<Button name={'Submit'} />}
+        Ok={<Ok name={'Submit'} />}
         {...others}
       >
         <FormItem 

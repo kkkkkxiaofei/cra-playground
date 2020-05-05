@@ -11,7 +11,7 @@ const getValidator = ({ required }) => {
 const FieldWrapper = props => {
   const { 
     children, 
-    rule, 
+    rule = {}, 
     uniqueKey = '', 
     editable = true,
     context: { 
@@ -19,7 +19,7 @@ const FieldWrapper = props => {
       snapshot,
     },
     initValues,
-    inject 
+    inject,
   } = props;
   const fieldRef = useRef();
   const [valueRecord, setValueRecord] = useState({ pre: '', current: initValues[uniqueKey] || '' });
@@ -49,7 +49,8 @@ const FieldWrapper = props => {
       cb: setError,
       fieldRef,
       reset: setValueRecord,
-      impact: rule.impact
+      impact: rule.impact,
+      checkVisible: rule.checkVisible,
     });
   }, [valueRecord, validators, snapshot]);
   const handleOnChange = e => setValueRecord({ pre: valueRecord.current, current: e.target.value });
@@ -61,12 +62,17 @@ const FieldWrapper = props => {
     value: valueRecord.current,
     fieldRef
   });
+
+  const { checkVisible = () => true } = rule;
+  const hidden = !checkVisible(snapshot);
   return (
     <div className={styles.container}>
-      <div style={{ display: `${ editable ? 'block' : 'none' }` }}>
-        {render(error)}
+      <div className={`${hidden ? styles.hidden : ''}`}>
+        <div style={{ display: `${ editable ? 'block' : 'none' }` }}>
+          {render(error)}
+        </div>
+        {!editable && <div>{valueRecord.current}</div>}
       </div>
-      {!editable && <div>{valueRecord.current}</div>}
     </div>
   );
 };

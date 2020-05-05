@@ -36,10 +36,11 @@ export const useFormContextData = (hookProps) => {
 
     const discard = () => {
         const { validators } = context;
-        Object.values(validators)
-            .forEach(({ fieldRef, uniqueKey, reset }) => {
-                reset({ pre: '', current: initValues[uniqueKey] || '' });
-                fieldRef.current.value = initValues[uniqueKey] || '';
+        Object.keys(validators)
+            .forEach(key => {
+                const { fieldRef, reset } = validators[key];
+                reset({ pre: '', current: initValues[key] || '' });
+                fieldRef.current.value = initValues[key] || '';
             });
     };
 
@@ -49,21 +50,22 @@ export const useFormContextData = (hookProps) => {
         if (uniqueKey) {
             //trigger new injector
             const injector = validators[uniqueKey];
-            errors = [injector, validators[injector.impact]]
-                .filter(item => !!item)
-                .reduce((aggre, { validator, cb, uniqueKey: currentUniqueKey }) => {
+            errors = (injector.impact ? [injector.impact, uniqueKey] : [uniqueKey])
+                .reduce((aggre, key) => {
+                    const { validator, cb } = validators[key];
                     const message = validator(snapshot);
                     cb(message);
-                    aggre[currentUniqueKey] = message;
+                    aggre[key] = message;
                     return aggre;
                 }, {});
         } else {
             //trigger all
-            errors = Object.values(validators)
-                .reduce((aggre, { validator, cb, uniqueKey: currentUniqueKey }) => {
+            errors = Object.keys(validators)
+                .reduce((aggre, key) => {
+                    const { validator, cb } = validators[key];
                     const message = validator(snapshot);
                     cb(message);
-                    aggre[currentUniqueKey] = message;
+                    aggre[key] = message;
                     return aggre;
                 }, {});
         }
@@ -76,14 +78,14 @@ export const useFormContextData = (hookProps) => {
         return result;
     }
     const inject = newValidator => {
-        const { uniqueKey, value, validator, cb, fieldRef, reset } = newValidator;
+        const { uniqueKey, validator } = newValidator;
         let validators = {};
         
         if (!!validator) {
             //inject
             validators = {
                 ...context.validators,
-                [uniqueKey]: { value, validator, cb, fieldRef, reset }
+                [uniqueKey]: { ...newValidator }
             }
         } else {
             //uninject
@@ -105,7 +107,7 @@ export const useFormContextData = (hookProps) => {
         // TODO: performance test
         let currentErrors = {};
         if (context.init) {
-            currentErrors  = trigger(newContext, newValidator.uniqueKey).errors;
+            currentErrors  = trigger(newContext, uniqueKey).errors;
         } else {
             if (newContext.init && initValidate) {
                 currentErrors  = trigger(newContext).errors;
@@ -113,9 +115,16 @@ export const useFormContextData = (hookProps) => {
         }
         
         const newErrors = { ...context.errors, ...currentErrors };
+        const hasErrors = Object.keys(newErrors)
+            .filter(key => {
+                const checkVisible = validators[key].checkVisible || (() => true);
+                return checkVisible(newSnapshot);
+            })
+            .some(key => !!newErrors[key]);
+            
         setContext({
             ...newContext,
-            hasErrors: Object.values(newErrors).some(error => !!error),
+            hasErrors,
             errors: newErrors,
             touched: context.init && newContext.init
         });

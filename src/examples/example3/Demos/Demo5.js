@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, FormItem } from '../Form';
 import styles from '../index.module.scss';
 import {
-  Button,
+  Ok,
   Input
 } from './Components';
 
@@ -11,7 +11,11 @@ const nameRules = [
     descriptor: {
       required: true
     },
-    message: 'name is required'
+    message: 'name is required',
+    checkVisible: snapshot => {
+      const { salary } = snapshot;
+      return salary > 200;
+    }
   }
 ];
 
@@ -20,14 +24,9 @@ const salaryRules = [
     descriptor: {
       required: true
     },
-    message: 'salary is mandorary'
+    message: 'salary is mandorary',
   }
 ];
-
-const checkVisible = snapshot => {
-  const { salary } = snapshot;
-  return salary > 200;
-}
 
 const Demo5 = (props) => {
   const { onSubmit = snapshot => console.log(snapshot), ...others } = props;
@@ -37,7 +36,7 @@ const Demo5 = (props) => {
         onSubmit={onSubmit} 
         initValidate={true} 
         initValues={{ salary: 200 }}
-        Ok={<Button name={'Submit'} />}
+        Ok={<Ok name={'Submit'} />}
         {...others}
       >
         <FormItem 
@@ -49,7 +48,6 @@ const Demo5 = (props) => {
         <FormItem 
           rule={nameRules[0]} 
           uniqueKey={'name'}
-          checkVisible={checkVisible}
         >
           <Input label={'name'} />
         </FormItem>
