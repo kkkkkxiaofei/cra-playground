@@ -7,6 +7,7 @@ export const FormContext = React.createContext({
         hasErrors: false,
         errors: {},
         snapshot: {},
+        touched: false,
     },
     initValues: {},
     inject: $ => $,
@@ -30,6 +31,7 @@ export const useFormContextData = (hookProps) => {
         errors: {},
         validators: {},
         snapshot: {},
+        touched: false,
     });
 
     const discard = () => {
@@ -47,7 +49,6 @@ export const useFormContextData = (hookProps) => {
         if (uniqueKey) {
             //trigger new injector
             const injector = validators[uniqueKey];
-            const 
             errors = [injector, validators[injector.impact]]
                 .filter(item => !!item)
                 .reduce((aggre, { validator, cb, uniqueKey: currentUniqueKey }) => {
@@ -115,7 +116,8 @@ export const useFormContextData = (hookProps) => {
         setContext({
             ...newContext,
             hasErrors: Object.values(newErrors).some(error => !!error),
-            errors: newErrors
+            errors: newErrors,
+            touched: context.init && newContext.init
         });
 
         onSnapshotUpdated(newSnapshot);
@@ -127,6 +129,6 @@ export const useFormContextData = (hookProps) => {
         trigger,
         onSubmit,
         initValues,
-        discard
+        discard,
     }
 }

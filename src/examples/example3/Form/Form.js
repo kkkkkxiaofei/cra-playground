@@ -11,14 +11,15 @@ const Form = props => {
     } = props;
     
     const formContextData = useFormContextData({ ...others, volumn: children.length });
-    const { context: { snapshot, hasErrors }, onSubmit, discard } = formContextData;
+    const { context: { snapshot, hasErrors, touched }, onSubmit, discard, trigger } = formContextData;
+    const submitHandler = touched ? () => onSubmit(snapshot) : () => trigger();
 
     return (
         <FormContext.Provider value={formContextData}>
           <div className={styles.formWrapper}>
             {children}
             <div className={styles.btnGroup}>
-              {Ok && cloneElement(Ok, { ...Ok.props, onClick: () => onSubmit(snapshot), disabled: hasErrors })}
+              {Ok && cloneElement(Ok, { ...Ok.props, onClick: submitHandler, disabled: hasErrors })}
               {Cancel && cloneElement(Cancel, { ...Cancel.props, onClick: () => discard() })}
             </div>
           </div>
