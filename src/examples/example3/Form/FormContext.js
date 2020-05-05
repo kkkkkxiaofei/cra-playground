@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 
 export const FormContext = React.createContext({
     context: {
@@ -83,9 +83,16 @@ export const useFormContextData = (hookProps) => {
             validators,
             snapshot: newSnapshot
         };
-        
         // TODO: performance test
-        const { errors } = trigger(newContext);
+        let errors = [];
+        if (context.init) {
+            errors  = trigger(newContext).errors;
+        } else {
+            if (newContext.init && initValidate) {
+                errors  = trigger(newContext).errors;
+            }
+        }
+        
         setContext({
             ...newContext,
             hasErrors: errors.length > 0
@@ -93,12 +100,6 @@ export const useFormContextData = (hookProps) => {
 
         onSnapshotUpdated(newSnapshot);
     };
-    
-    useEffect(() => {
-        if (context.init && initValidate) {
-            trigger(context);
-        }
-    }, [context]);
 
     return {
         context,

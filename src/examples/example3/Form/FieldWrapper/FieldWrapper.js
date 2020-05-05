@@ -41,6 +41,7 @@ const FieldWrapper = props => {
   useEffect(() => {
     const oldValidator = validators[uniqueKey]; 
     const shouldInject = !oldValidator || (oldValidator && valueRecord.current !== oldValidator.value[uniqueKey]);
+    
     shouldInject && inject({
       uniqueKey,
       value: { ...snapshot, [uniqueKey]: valueRecord.current },
@@ -59,7 +60,6 @@ const FieldWrapper = props => {
     value: valueRecord.current,
     fieldRef
   });
-
   return (
     <div className={styles.container}>
       <div style={{ display: `${ editable ? 'block' : 'none' }` }}>

@@ -30,7 +30,7 @@ const Demo1 = (props) => {
     <div className={styles.container}>
       <Form 
         onSubmit={onSubmit} 
-        initValidate={true}
+        initValidate={false}
         initValues={{ salary: 200 }}
         {...others}
       >

@@ -14,14 +14,13 @@ const Demo4 = props => {
   }
   return (
     <div className={styles.container}>
-      {forms.map((Form, index) => <Form onSnapshotUpdated={(snapshot) => {
+      {forms.map((Form, index) => <Form initValidate={false} onSnapshotUpdated={(snapshot) => {
           setSnapshots({...snapshots, [index]: snapshot })
       }} />)}
       <div className={styles.btnGroup}>
         <Button name={'add +'} onClick={addHandler} />
         <Button name={'save'} onClick={saveHandler} />
       </div>
-      
     </div>
   );
 };
