@@ -19,8 +19,25 @@ const salaryRules = [
     descriptor: {
       required: true
     },
-    impact: 'company',
-    message: 'salary is mandorary'
+    message: 'salary is mandatary'
+  }
+];
+
+const companyRules = [
+  {
+    descriptor: {
+      required: true
+    },
+    message: 'company is mandatary'
+  }
+];
+
+const addressRules = [
+  {
+    descriptor: {
+      required: true
+    },
+    message: 'address is mandatary'
   }
 ];
 
@@ -31,7 +48,6 @@ const Demo1 = (props) => {
       <Form 
         onSubmit={onSubmit} 
         initValidate={false}
-        initValues={{ salary: 200 }}
         {...others}
       >
         <FormItem 
@@ -45,6 +61,18 @@ const Demo1 = (props) => {
           uniqueKey={'salary'}
         >
           <Input label={'salary'}  />
+        </FormItem>
+        <FormItem 
+          rule={companyRules[0]} 
+          uniqueKey={'company'}
+        >
+          <Input label={'company'}  />
+        </FormItem>
+        <FormItem 
+          rule={addressRules[0]} 
+          uniqueKey={'address'}
+        >
+          <Input label={'address'}  />
         </FormItem>
       </Form>
     </div>

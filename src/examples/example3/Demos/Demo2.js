@@ -21,7 +21,8 @@ const salaryRules = [
       const { salary } = snapshot;
       return !isNaN(salary);      
     },
-    message: 'salary must be number'
+    message: 'salary must be number',
+    impact: 'company'
   }
 ];
 
@@ -44,7 +45,7 @@ const Demo2 = props => {
     <div className={styles.container}>
       <Form 
         onSubmit={onSubmit} 
-        initValidate={true} 
+        initValidate={true}
         initValues={{ salary: 200 }}
         Ok={<Button name={'Submit'} />}
         {...others}

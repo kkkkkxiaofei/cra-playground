@@ -49,6 +49,7 @@ const FieldWrapper = props => {
       cb: setError,
       fieldRef,
       reset: setValueRecord,
+      impact: rule.impact
     });
   }, [valueRecord, validators, snapshot]);
   const handleOnChange = e => setValueRecord({ pre: valueRecord.current, current: e.target.value });

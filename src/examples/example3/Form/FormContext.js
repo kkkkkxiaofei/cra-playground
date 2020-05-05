@@ -5,6 +5,7 @@ export const FormContext = React.createContext({
         validators: {},
         init: false,
         hasErrors: false,
+        errors: {},
         snapshot: {},
     },
     initValues: {},
@@ -26,6 +27,7 @@ export const useFormContextData = (hookProps) => {
     const [context, setContext] = useState({
         init: false,
         hasErrors: false,
+        errors: {},
         validators: {},
         snapshot: {},
     });
@@ -39,15 +41,31 @@ export const useFormContextData = (hookProps) => {
             });
     };
 
-    const trigger = (lastestContext = context, needCallback = true) => {
+    const trigger = (lastestContext = context, uniqueKey) => {
         const { validators, snapshot } = lastestContext;
-        const errors = Object.values(validators)
-            .map(({ validator, cb }) => {
-                const message = validator(snapshot);
-                needCallback && cb(message);
-                return message;
-            })
-            .filter(message => !!message);
+        let errors = {};
+        if (uniqueKey) {
+            //trigger new injector
+            const injector = validators[uniqueKey];
+            const 
+            errors = [injector, validators[injector.impact]]
+                .filter(item => !!item)
+                .reduce((aggre, { validator, cb, uniqueKey: currentUniqueKey }) => {
+                    const message = validator(snapshot);
+                    cb(message);
+                    aggre[currentUniqueKey] = message;
+                    return aggre;
+                }, {});
+        } else {
+            //trigger all
+            errors = Object.values(validators)
+                .reduce((aggre, { validator, cb, uniqueKey: currentUniqueKey }) => {
+                    const message = validator(snapshot);
+                    cb(message);
+                    aggre[currentUniqueKey] = message;
+                    return aggre;
+                }, {});
+        }
         
         const result = {
             data: snapshot,
@@ -84,18 +102,20 @@ export const useFormContextData = (hookProps) => {
             snapshot: newSnapshot
         };
         // TODO: performance test
-        let errors = [];
+        let currentErrors = {};
         if (context.init) {
-            errors  = trigger(newContext).errors;
+            currentErrors  = trigger(newContext, newValidator.uniqueKey).errors;
         } else {
             if (newContext.init && initValidate) {
-                errors  = trigger(newContext).errors;
+                currentErrors  = trigger(newContext).errors;
             }
         }
         
+        const newErrors = { ...context.errors, ...currentErrors };
         setContext({
             ...newContext,
-            hasErrors: errors.length > 0
+            hasErrors: Object.values(newErrors).some(error => !!error),
+            errors: newErrors
         });
 
         onSnapshotUpdated(newSnapshot);

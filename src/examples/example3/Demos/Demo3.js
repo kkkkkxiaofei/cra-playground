@@ -44,7 +44,6 @@ const Demo3 = props => {
     <div className={styles.container}>
       <Form 
         onSubmit={onSubmit} 
-        initValidate={true} 
         Ok={<Button name={'Submit'} />}
         {...others}
       >
