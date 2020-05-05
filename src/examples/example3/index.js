@@ -11,30 +11,30 @@ import {
 
 const FormValidationExamples = props => {
   return (
-    <div>
-      <div className={styles.demo}>
-        <h1>Demo1</h1>
-        <Demo1  />
+    <div className={styles.demoList}>
+      <div className={styles.demoWrapper}>
+        <h2>Demo1</h2>
+        <div className={styles.demo}><Demo1  /></div>
       </div>
-      <div className={styles.demo}>
-        <h1>Demo2</h1>
-        <Demo2  />
+      <div className={styles.demoWrapper}>
+        <h2>Demo2</h2>
+        <div className={styles.demo}><Demo2  /></div>
       </div>
-      <div className={styles.demo}>
-        <h1>Demo3</h1>
-        <Demo3  />
+      <div className={styles.demoWrapper}>
+        <h2>Demo3</h2>
+        <div className={styles.demo}><Demo3  /></div>
       </div>
-      <div className={styles.demo}>
-        <h1>Demo4</h1>
-        <Demo4  />
+      <div className={styles.demoWrapper}>
+        <h2>Demo4</h2>
+        <div className={styles.demo}><Demo4  /></div>
       </div>
-      <div className={styles.demo}>
-        <h1>Demo5</h1>
-        <Demo5  />
+      <div className={styles.demoWrapper}>
+        <h2>Demo5</h2>
+        <div className={styles.demo}><Demo5  /></div>
       </div>
-      <div className={styles.demo}>
-        <h1>Demo6</h1>
-        <Demo6 />
+      <div className={styles.demoWrapper}>
+        <h2>Demo6</h2>
+        <div className={styles.demo}v><Demo6 /></div>
       </div>
     </div>
   )

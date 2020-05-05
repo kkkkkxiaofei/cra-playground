@@ -52,8 +52,9 @@ const FieldWrapper = props => {
   }, [valueRecord, validators, snapshot]);
   const handleOnChange = e => setValueRecord({ pre: valueRecord.current, current: e.target.value });
 
-  const render = () => cloneElement(children, {
-    ...children.props, 
+  const render = (errorMessage) => cloneElement(children, {
+    ...children.props,
+    errorMessage, 
     onChange: handleOnChange,
     value: valueRecord.current,
     fieldRef
@@ -62,8 +63,7 @@ const FieldWrapper = props => {
   return (
     <div className={styles.container}>
       <div style={{ display: `${ editable ? 'block' : 'none' }` }}>
-        {render()}
-        {<p>{error}</p>}
+        {render(error)}
       </div>
       {!editable && <div>{valueRecord.current}</div>}
     </div>

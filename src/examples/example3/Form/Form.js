@@ -1,5 +1,6 @@
 import React, { cloneElement } from 'react';
 import { FormContext, useFormContextData } from './FormContext';
+import styles from './Form.module.scss';
 
 const Form = props => {
     const { 
@@ -14,11 +15,14 @@ const Form = props => {
 
     return (
         <FormContext.Provider value={formContextData}>
+          <div className={styles.formWrapper}>
             {children}
-            <div>
+            <div className={styles.btnGroup}>
               {Ok && cloneElement(Ok, { ...Ok.props, onClick: () => onSubmit(snapshot), disabled: hasErrors })}
               {Cancel && cloneElement(Cancel, { ...Cancel.props, onClick: () => discard() })}
             </div>
+          </div>
+            
         </FormContext.Provider>
     );
 };

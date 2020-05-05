@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import { Form, FormItem } from '../Form';
 import styles from '../index.module.scss';
 import {
   Button,
@@ -18,8 +17,11 @@ const Demo4 = props => {
       {forms.map((Form, index) => <Form onSnapshotUpdated={(snapshot) => {
           setSnapshots({...snapshots, [index]: snapshot })
       }} />)}
-      <Button name={'add +'} onClick={addHandler} />
-      <Button name={'save'} onClick={saveHandler} />
+      <div className={styles.btnGroup}>
+        <Button name={'add +'} onClick={addHandler} />
+        <Button name={'save'} onClick={saveHandler} />
+      </div>
+      
     </div>
   );
 };

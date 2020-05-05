@@ -1,0 +1,95 @@
+$labelColor: #666;
+$errorColor: #aa2020;
+
+@mixin inputStyle {
+  border: 1px solid #9b9b9b;
+  border-radius: 2px;
+  padding: 6px;
+  color: #323232;
+  &:focus {
+    border-color: #2b6ed2;
+    outline: none;
+    box-shadow: 0 0 0 1px #2b6ed2;
+  }
+}
+
+@mixin cancelBtnStyle {
+  border: 2px solid #333f48;
+  color: #333f48;
+  background: #fff;
+}
+
+@mixin okBtnStyle {
+  color: #fff;
+  background: #333f48;
+}
+
+@mixin btnDisabled {
+  border: none;
+  color: #21282e;
+  background-color: #f7f8f9;
+  cursor: not-allowed;
+}
+
+@mixin btnStyle {
+  min-width: 200px;
+  height: 40px;
+  padding: 0 40px;
+  border: none;
+  border-radius: 2px;
+  font-family: Museo-Sans-500,sans-serif;
+  font-size: 14px;
+}
+
+.input {
+  height: 60px;
+  &.error {
+    input, input:focus {
+      border-color: $errorColor;
+      box-shadow: none;
+    }
+  }
+
+  label {
+    color: #666;
+    margin-right: 10px;
+    width: 100px;
+    display: inline-block;
+    text-align: right;
+  }
+  input {
+    @include inputStyle;
+    
+  }
+  span {
+    transform: translate(182px, 10px);
+    font-size: 12px;
+    display: block;
+    color: #aa2020;
+    text-align: left;
+  }
+}
+
+.btn {
+  button:hover {
+    cursor: pointer;
+  }
+  &.ok button {
+    @include okBtnStyle;
+  }
+  &.cancel button {
+    @include cancelBtnStyle;
+  }
+  button {
+    @include btnStyle;
+    
+    &:focus {
+      outline: none;
+    }
+  }
+  &.disabled {
+    button {
+      @include btnDisabled;
+    }
+  }
+}

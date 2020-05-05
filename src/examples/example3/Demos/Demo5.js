@@ -20,14 +20,13 @@ const salaryRules = [
     descriptor: {
       required: true
     },
-    impact: 'company',
     message: 'salary is mandorary'
   }
 ];
 
 const checkVisible = snapshot => {
   const { salary } = snapshot;
-  return salary > 200 ? true : false;
+  return salary > 200;
 }
 
 const Demo5 = (props) => {
@@ -42,17 +41,17 @@ const Demo5 = (props) => {
         {...others}
       >
         <FormItem 
+          rule={salaryRules[0]} 
+          uniqueKey={'salary'}
+        >
+          <Input label={'salary'}  />
+        </FormItem>
+        <FormItem 
           rule={nameRules[0]} 
           uniqueKey={'name'}
           checkVisible={checkVisible}
         >
           <Input label={'name'} />
-        </FormItem>
-        <FormItem 
-          rule={salaryRules[0]} 
-          uniqueKey={'salary'}
-        >
-          <Input label={'salary'}  />
         </FormItem>
       </Form>
     </div>

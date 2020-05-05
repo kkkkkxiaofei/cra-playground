@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Form, FormItem } from '../Form';
 import styles from '../index.module.scss';
 import {
-  Button,
+  Ok,
+  Cancel,
   Input
 } from './Components';
 
@@ -45,8 +46,8 @@ const Demo6 = props => {
       <Form 
         onSubmit={onSubmit} 
         initValidate={true} 
-        Ok={<Button name={'Submit'} />}
-        Cancel={<Button name={'Cancel'} />}
+        Ok={<Ok name={'Submit'} />}
+        Cancel={<Cancel name={'Cancel'} />}
         {...others}
       >
         <FormItem 
