@@ -5,11 +5,15 @@ export const Input = props => {
   const { label, value, onChange, fieldRef, errorMessage } = props;
   return (
     <div className={styles.input + `${errorMessage ? ` ${styles.error}` : ''}`}>
-      <div>
-        <label>{label}</label>
-        <input ref={fieldRef} type="text" value={value} onChange={onChange} />
+      <div className={styles.group}>
+        <div className={styles.item}>
+          <label>{label}</label>
+        </div>
+        <div className={styles.item}>
+          <input ref={fieldRef} type="text" value={value} onChange={onChange} />
+          <span>{errorMessage}</span>
+        </div>
       </div>
-      <span>{errorMessage}</span>
     </div>
   )
 }
