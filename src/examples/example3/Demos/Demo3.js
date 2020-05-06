@@ -3,6 +3,7 @@ import { Form, FormItem } from '../Form';
 import styles from '../index.module.scss';
 import {
   Ok,
+  Cancel,
   Input
 } from './Components';
 
@@ -46,6 +47,8 @@ const Demo3 = props => {
       <Form 
         onSubmit={onSubmit} 
         Ok={<Ok name={'Submit'} />}
+        Cancel={<Cancel name={'Discard'} />}
+        initValues={{ name: 'Kim', salary: '999999', company: 'Ali' }}
         {...others}
       >
         <FormItem 

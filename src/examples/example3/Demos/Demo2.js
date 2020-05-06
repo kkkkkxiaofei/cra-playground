@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Form, FormItem } from '../Form';
 import styles from '../index.module.scss';
 import {
   Ok,
-  Cancel,
   Input
 } from './Components';
 
@@ -49,7 +48,6 @@ const Demo2 = props => {
         initValidate={true}
         initValues={{ salary: 200 }}
         Ok={<Ok name={'Submit'} />}
-        Cancel={<Cancel name={'Discard'} />}
         {...others}
       >
         <FormItem 

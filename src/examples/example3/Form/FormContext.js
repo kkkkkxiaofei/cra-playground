@@ -129,7 +129,7 @@ export const useFormContextData = (hookProps) => {
             touched: context.init && newContext.init
         });
 
-        onSnapshotUpdated(newSnapshot);
+        onSnapshotUpdated({ hasErrors, snapshot: newSnapshot });
     };
 
     return {
