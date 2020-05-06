@@ -55,12 +55,13 @@ const FieldWrapper = props => {
   }, [valueRecord, validators, snapshot]);
   const handleOnChange = e => setValueRecord({ pre: valueRecord.current, current: e.target.value });
 
-  const render = (errorMessage) => cloneElement(children, {
+  const render = (errorMessage, editable) => cloneElement(children, {
     ...children.props,
     errorMessage, 
     onChange: handleOnChange,
     value: valueRecord.current,
-    fieldRef
+    fieldRef,
+    disabled: !editable,
   });
 
   const { checkVisible = () => true } = rule;
@@ -68,10 +69,9 @@ const FieldWrapper = props => {
   return (
     <div className={styles.container}>
       <div className={`${hidden ? styles.hidden : ''}`}>
-        <div style={{ display: `${ editable ? 'block' : 'none' }` }}>
-          {render(error)}
+        <div>
+          {render(error, editable)}
         </div>
-        {!editable && <div>{valueRecord.current}</div>}
       </div>
     </div>
   );

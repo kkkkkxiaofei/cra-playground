@@ -5,4 +5,12 @@
   .hidden {
     visibility: hidden;
   }
+  .view {
+    width: 128px;
+    height: 17px;
+    border: 1px solid #9b9b9b;
+    border-radius: 2px;
+    padding: 6px;
+    color: #323232;
+  }
 }

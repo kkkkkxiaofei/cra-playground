@@ -74,6 +74,12 @@ $errorColor: #aa2020;
     }
   }
 }
+.disabled {
+  input {
+    background-color: #eee;
+    cursor: not-allowed;
+  }
+}
 
 .btn {
   button:hover {

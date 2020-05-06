@@ -53,18 +53,21 @@ const Demo1 = (props) => {
         <FormItem 
           rule={nameRules[0]} 
           uniqueKey={'name'}
+          editable={false}
         >
           <Input label={'name'} />
         </FormItem>
         <FormItem 
           rule={salaryRules[0]} 
           uniqueKey={'salary'}
+          editable={false}
         >
           <Input label={'salary'}  />
         </FormItem>
         <FormItem 
           rule={companyRules[0]} 
           uniqueKey={'company'}
+          editable={false}
         >
           <Input label={'company'}  />
         </FormItem>
