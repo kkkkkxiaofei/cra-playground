@@ -20,78 +20,90 @@ const resources = [
     id: '0',
     src: 'http://mov.bn.netease.com/mobilev/2012/12/8/A/S8H4PQP8A.mp4',
     caption: '/justice1.vtt',
-    title: '谋杀背后的道德逻辑'
+    title: '谋杀背后的道德逻辑',
+    bullets: gernateBulltes(),
   },
   {
     id: '1',
     src: 'http://mov.bn.netease.com/mobilev/2012/12/C/6/S8H4U16C6.mp4',
     caption: '/justice2.vtt',
-    title: '为生命标价'
+    title: '为生命标价',
+    bullets: gernateBulltes(),
   },
   {
     id: '2',
     src: 'http://mov.bn.netease.com/mobilev/2012/12/G/I/S8H4VMUGI.mp4',
     caption: '/justice3.vtt',
-    title: '自由的选择'
+    title: '自由的选择',
+    bullets: gernateBulltes(),
   },
   {
     id: '3',
     src: 'http://mov.bn.netease.com/mobilev/2012/12/8/2/S8H52FA82.mp4',
     caption: '/justice4.vtt',
-    title: '这是我的土地'
+    title: '这是我的土地',
+    bullets: gernateBulltes(),
   },
   {
     id: '4',
     src: 'http://mov.bn.netease.com/mobilev/2012/12/7/M/S8H53HK7M.mp4',
     caption: '/justice5.vtt',
-    title: '是否雇佣顶替自己服役的人'
+    title: '是否雇佣顶替自己服役的人',
+    bullets: gernateBulltes(),
   },
   {
     id: '5',
     src: 'http://mov.bn.netease.com/mobilev/2012/12/E/M/S8H53JCEM.mp4',
     caption: '/justice6.vtt',
-    title: '小心你的动机'
+    title: '小心你的动机',
+    bullets: gernateBulltes(),
   },
   {
     id: '6',
     src: 'http://mov.bn.netease.com/mobilev/2012/12/J/B/S8H7CFIJB.mp4',
     caption: '/justice7.vtt',
-    title: '谎言的教训'
+    title: '谎言的教训',
+    bullets: gernateBulltes(),
   },
   {
     id: '7',
     src: 'http://mov.bn.netease.com/mobilev/2012/12/5/N/S8H7FHH5N.mp4',
     caption: '/justice8.vtt',
-    title: '公平的起点是什么'
+    title: '公平的起点是什么',
+    bullets: gernateBulltes(),
   },
   {
     id: '8',
     src: 'http://mov.bn.netease.com/mobilev/2012/12/2/N/S8H7H5D2N.mp4',
     caption: '/justice9.vtt',
-    title: '平权行动的争论'
+    title: '平权行动的争论',
+    bullets: gernateBulltes(),
   },
   {
     id: '9',
     src: 'http://mov.bn.netease.com/mobilev/2012/12/C/V/S8H7JBDCV.mp4',
     caption: '/justice9.vtt',
-    title: '好公民'
+    title: '好公民',
+    bullets: gernateBulltes(),
   },
   {
     id: '10',
     src: 'http://mov.bn.netease.com/mobilev/2012/12/9/B/S8H7K1L9B.mp4',
     caption: '/justice11.vtt',
-    title: '共同责任的辩论'
+    title: '共同责任的辩论',
+    bullets: gernateBulltes(),
   },
   {
     id: '11',
     src: 'http://mov.bn.netease.com/mobilev/2012/12/7/1/S8H7K5M71.mp4',
     caption: '/justice12.vtt',
-    title: '同性婚姻的争论'
+    title: '同性婚姻的争论',
+    bullets: gernateBulltes(),
   }
 ]
 
 const VideoListPage = () => {
-  const [resource, setResource] = useState({...resources[0], bullets: gernateBulltes()});
+  const [resource, setResource] = useState({ ...resources[0] });
   return (
     <div className={styles.videoListPage}>
       <div className={styles.palyerWrapper}> 
@@ -99,7 +111,7 @@ const VideoListPage = () => {
       </div>
       <div className={styles.videoList}>
         {resources.map((item, index) => (
-          <div className={classNames(styles.placeHolder, { [styles.actived]: index == resource.id })} onClick={() => setResource({...item, bullets: gernateBulltes()})}>
+          <div className={classNames(styles.placeHolder, { [styles.actived]: index == resource.id })} onClick={() => setResource({ ...item })}>
             <div className={styles.area}>
               {item.title}
             </div>

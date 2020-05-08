@@ -1,20 +1,22 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styles from './VideoPlayer.module.scss';
 
+const getPlayStatus = videoRef => {
+  const { current } = videoRef;
+  const { ended, played = [], paused } = current || {};
+  return !ended && played.length > 0 && !paused;
+}
+
 const VideoPlayer = ({ src, caption, render }) => {
   const videoRef = useRef();
   const [refData, setRefData] = useState({ currentTime: 0, isPlaying: false });
-  
+
   useEffect(() => {
     const handleOnPlay = () => {
-      if (videoRef.current) {
-        const { current: { ended, played } } = videoRef;
-        const isPlaying = !ended && played.length > 0;
-        if (isPlaying) {
-          setRefData({ currentTime: videoRef.current.currentTime, isPlaying })
-        }
-      window.requestAnimationFrame(handleOnPlay);
+      if (getPlayStatus(videoRef)) {
+        setRefData({ currentTime: videoRef.current.currentTime, isPlaying: true })
       }
+      window.requestAnimationFrame(handleOnPlay);
     };
     window.requestAnimationFrame(handleOnPlay);
 
@@ -22,6 +24,11 @@ const VideoPlayer = ({ src, caption, render }) => {
       setRefData(null);
     }
   }, []);
+
+  useEffect(() => {
+    setRefData({ currentTime: 0, isPlaying: false });
+  }, [src]);
+
   return (
     <div>
       <div className={styles.videoWrapper}>
