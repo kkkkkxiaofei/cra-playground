@@ -2,10 +2,8 @@ import React, { useState, useMemo } from 'react';
 import cb, { name } from './util';
 import Child from './Child';
 
-window.cb2 = window.cb2 || cb;
 
 var _name = name;
-var nextName = 'xiaofei';
 
 const logger = () => {
 	console.log('parent');
