@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styles from './Bullet.module.scss';
 
 const Bullet = (props) => {
     const { bullets, currentTime } = props;
-    console.log(bullets, 'bullets', currentTime);
     const calcPercent = bullet => {
         let { displayTime, duration } = bullet;
         duration = duration / 1000;
@@ -18,17 +17,18 @@ const Bullet = (props) => {
         <div>
             {
                 bullets.filter(bullet => calcPercent(bullet) > 0).map(bullet => (
-                    <div className={styles.bulletBlock} style={{ 
+                    <div className={styles.bulletBlock} style={{
                         transform: `translate(-${calcPercent(bullet)}%, ${bullet.translateY})`,
                         color: bullet.color,
-                        fontSize: bullet.fontSize }}
+                        fontSize: bullet.fontSize
+                    }}
                     >
                         {bullet.content}
                     </div>
                 ))
             }
         </div>
-        
+
     );
 }
 

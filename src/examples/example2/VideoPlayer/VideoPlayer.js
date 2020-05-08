@@ -2,35 +2,37 @@ import React, { useRef, useEffect, useState } from 'react';
 import styles from './VideoPlayer.module.scss';
 
 const VideoPlayer = ({ src, caption, render }) => {
-  console.log(caption)
   const videoRef = useRef();
-  const [currentTime, setCurrentTime] = useState(0);
+  const [refData, setRefData] = useState({ currentTime: 0, isPlaying: false });
+  
   useEffect(() => {
     const handleOnPlay = () => {
-      if (!videoRef.current.ended && videoRef.current.played.length > 0) {
-        // onPlay(videoRef.current.currentTime);
-        setCurrentTime(videoRef.current.currentTime);
-      } else {
-        // window.cancelAnimationFrame(handleOnPlay);
-      }
+      if (videoRef.current) {
+        const { current: { ended, played } } = videoRef;
+        const isPlaying = !ended && played.length > 0;
+        if (isPlaying) {
+          setRefData({ currentTime: videoRef.current.currentTime, isPlaying })
+        }
       window.requestAnimationFrame(handleOnPlay);
+      }
     };
-    window.handleOnPlay = window.handleOnPlay || handleOnPlay;
     window.requestAnimationFrame(handleOnPlay);
 
-    return window.cancelAnimationFrame(handleOnPlay);
+    return () => {
+      setRefData(null);
+    }
   }, []);
   return (
     <div>
       <div className={styles.videoWrapper}>
-        <video ref={videoRef} controls src={src} style={{ width: '100%', height: '100%' }}>
+        <video ref={videoRef} controls autoPlay src={src} style={{ width: '100%', height: '100%' }}>
           <track default kind="captions"
               srclang="zh"
               label="Chinese"
               src={caption}/>
         </video>
       </div>
-      {render(currentTime)}
+      {refData.isPlaying && render(refData.currentTime)}
     </div>
   )
 }
