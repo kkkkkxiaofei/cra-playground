@@ -3,23 +3,44 @@
     width: 1000px;
 }
 
+@mixin placeHolderActive {
+    .cover {
+        transform: scale(1.3);
+    }
+    opacity: 1;
+    cursor: pointer;
+}
+
 .videoList {
     margin-top: 40px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     row-gap: 10px;
     column-gap: 10px;
+    
     .placeHolder {
-        &:hover {
-            opacity: 1;
-            cursor: pointer;    
-        }
+        position: relative;
+        .cover {
+            background: no-repeat center/20% url('/play-icon.png');
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: all .3s ease-out;
+        }    
         color: white;
         background-color: black;
         opacity: .8;
         .area {
             padding-top: calc(56.25% - 18px);
-            transform: translateY(-50%);
+            transform: translateY(-10px);
+        }
+        &:hover {
+            @include placeHolderActive;
+        }
+        &.actived {
+            @include placeHolderActive;
         }
     }
 }
