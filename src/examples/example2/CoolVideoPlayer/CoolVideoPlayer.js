@@ -1,3 +1,4 @@
+//TODO: customized controls
 import React, { useState } from 'react';
 import styles from './CoolVideoPlayer.module.scss';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
