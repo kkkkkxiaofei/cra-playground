@@ -1,3 +1,4 @@
+//todo: modify sw lifecycle to execute when page loads
 export function register() {
   window.addEventListener('load', () => {
     const swUrl = `/online-editor-sw.js`;

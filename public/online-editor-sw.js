@@ -23,4 +23,6 @@ const result = babelInstance.transform(source, {
         ast: false,
         compact: true,
     }).code
-console.log(result, '=========');
+
+const channel = new BroadcastChannel('sw-messages');
+channel.postMessage({ type: 'sw', message: result });
