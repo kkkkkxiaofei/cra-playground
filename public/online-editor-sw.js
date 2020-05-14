@@ -3,11 +3,15 @@ importScripts('/example5/babel.js');
 const source = `
 const ReactEditor = props => {
   return (
-    <div className={styles.container}>
+    <div>
       react editor
     </div>
   );
 };
+ReactDOM.render(
+  <ReactEditor />,
+  document.getElementById('root')
+)
 `;
 
 const babelInstance = 
