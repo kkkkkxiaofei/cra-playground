@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
+import CodeEditor from './ReactEditor/ReactEditor';
 // import styles from './ReactEditor.module.scss';
 const iframContent = `
 <!DOCTYPE html>
@@ -26,6 +27,7 @@ const ReactEditor = props => {
   const [code, setCode] = useState('');
   const [style, setStyle] = useState('');
   
+  let channel;
 
   useEffect(() => {
     window.setStyle = window.setStyle || setStyle;
@@ -33,7 +35,7 @@ const ReactEditor = props => {
     const receiver = event => {
       setCode(event.data.message);
     }
-    const channel = new BroadcastChannel('sw-messages');
+    channel = new BroadcastChannel('sw-messages');
     channel.addEventListener('message', receiver, false);
 
     return () => channel.removeEventListener('message', receiver);
@@ -52,9 +54,13 @@ const ReactEditor = props => {
       return iframContent.replace('/* style */', style).replace('/* code */', code);
     }
   }, [code, style]);
+
+  const codeOnChange = code => channel.postMessage({ type: 'sw', message: code });
+
   return (
     <div>
       <iframe ref={iframeRef} srcDoc={doc} />
+      <CodeEditor onChange={codeOnChange} />
     </div>
   );
 };

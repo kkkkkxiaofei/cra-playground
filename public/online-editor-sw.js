@@ -22,11 +22,13 @@ const babelInstance =
       ["stage-0", { decoratorsBeforeExport: false }]
     ];
 
-const result = babelInstance.transform(source, {
-        presets: babelPresets,
-        ast: false,
-        compact: true,
-    }).code
 
 const channel = new BroadcastChannel('sw-messages');
-channel.postMessage({ type: 'sw', message: result });
+channel.addEventListener('message', event => {
+  const result = babelInstance.transform(event.data.message || source, {
+    presets: babelPresets,
+    ast: false,
+    compact: true,
+  }).code
+  channel.postMessage({ type: 'sw', message: result });
+}, false);
