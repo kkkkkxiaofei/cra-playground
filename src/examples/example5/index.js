@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
-import CodeEditor from './ReactEditor/ReactEditor';
-// import styles from './ReactEditor.module.scss';
+import CodeEditor from './CodeEditor/CodeEditor';
 const iframContent = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
     /* style */
@@ -22,9 +20,26 @@ const iframContent = `
 </body>
 </html>
 `;
+
+const initCode = `
 const ReactEditor = props => {
+  const [visible, setVisible] = React.useState(false);
+  return (
+    <div>
+      <button onClick={() => setVisible(!visible)}>click me</button>
+      {visible && <div>react editor</div>}
+    </div>
+  );
+};
+
+ReactDOM.render(
+  <ReactEditor />,
+  document.getElementById('root')
+);
+`;
+const ReactPlayground = props => {
   const iframeRef = useRef();
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState(initCode);
   const [style, setStyle] = useState('');
   
   let channel;
@@ -41,18 +56,17 @@ const ReactEditor = props => {
     return () => channel.removeEventListener('message', receiver);
   }, []);
 
-  useEffect(() => {
-    if (iframeRef.current) {
-      const newContent = iframContent.replace('/* style */', style).replace('/* code */', code);
-      console.log('.....', newContent);
-      iframeRef.current.contentDocument.write(newContent);
-    }
-  }, [code, style]);
+  // useEffect(() => {
+  //   if (iframeRef.current) {
+  //     const newContent = iframContent.replace('/* style */', style).replace('/* code */', code);
+  //     iframeRef.current.contentDocument.write(newContent);
+  //   }
+  // }, [code, style]);
 
   const doc = useMemo(() => {
-    if (iframeRef.current) {
+    // if (iframeRef.current) {
       return iframContent.replace('/* style */', style).replace('/* code */', code);
-    }
+    // }
   }, [code, style]);
 
   const codeOnChange = code => channel.postMessage({ type: 'sw', message: code });
@@ -60,9 +74,13 @@ const ReactEditor = props => {
   return (
     <div>
       <iframe ref={iframeRef} srcDoc={doc} />
-      <CodeEditor onChange={codeOnChange} />
+      <CodeEditor 
+        onChange={codeOnChange} 
+        language={"javascript"} 
+        value={initCode}
+      />
     </div>
   );
 };
 
-export default ReactEditor;
+export default ReactPlayground;

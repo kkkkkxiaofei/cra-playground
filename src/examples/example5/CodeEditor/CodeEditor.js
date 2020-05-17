@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import styles from './ReactEditor.module.scss';
+import styles from './CodeEditor.module.scss';
 import * as Monaco from 'monaco-editor';
 
 const ReactEditor = props => {
-  const { onChange } = props;
+  const { onChange, value, language } = props;
   const editorRef = useRef();
   useEffect(() => {
     window.MonacoEnvironment = {
@@ -27,16 +27,27 @@ const ReactEditor = props => {
     Monaco.editor.create(
       editorRef.current, 
       {
-        value: 'function() {}',
-        language: 'javascript',
+        value,
+        language,
       },
     );
 
     const keyUpHandler = e => {
-      const currentValue = Object.values(e.target.parentElement.querySelectorAll('.view-line span[class^=m]'))
-        .map(element => element.innerText)
+      const currentValue = Object.values(e.target.parentElement.querySelectorAll('.view-line'))
+        .sort((e1, e2) => {
+          return e1.style.top.replace('px', '') - e2.style.top.replace('px', '');
+        })
+        .map(e => {
+          
+          const lineValue = Object.values(e.querySelectorAll('span[class^=m]')).map(subElement => subElement.innerText).join('');
+          return lineValue;
+        })
         .join('');
-      onChange(currentValue);
+      console.log(currentValue)
+      if (currentValue !== editorRef.current.value) {
+        editorRef.current.value = currentValue;
+        onChange(currentValue);
+      }
     };
 
     editorRef.current.addEventListener('keyup', keyUpHandler);
