@@ -25,7 +25,7 @@ const initCode = `
 const ReactEditor = props => {
   const [visible, setVisible] = React.useState(false);
   return (
-    <div>
+    <div className="bg">
       <button onClick={() => setVisible(!visible)}>click me</button>
       {visible && <div>react editor</div>}
     </div>
@@ -37,10 +37,16 @@ ReactDOM.render(
   document.getElementById('root')
 );
 `;
+
+const initStyle = `
+.bg {
+  background-color: green;
+}
+`;
 const ReactPlayground = props => {
   const iframeRef = useRef();
   const [code, setCode] = useState(initCode);
-  const [style, setStyle] = useState('');
+  const [style, setStyle] = useState(initStyle);
   
   let channel;
 
@@ -56,21 +62,15 @@ const ReactPlayground = props => {
     return () => channel.removeEventListener('message', receiver);
   }, []);
 
-  // useEffect(() => {
-  //   if (iframeRef.current) {
-  //     const newContent = iframContent.replace('/* style */', style).replace('/* code */', code);
-  //     iframeRef.current.contentDocument.write(newContent);
-  //   }
-  // }, [code, style]);
-
   const doc = useMemo(() => {
-    // if (iframeRef.current) {
       return iframContent.replace('/* style */', style).replace('/* code */', code);
-    // }
   }, [code, style]);
 
   const codeOnChange = code => channel.postMessage({ type: 'sw', message: code });
-
+  const styleOnChange = style => {
+    // console.log(style.replace(' ', ''));
+    setStyle(style.replace(/\s/g, ' '));
+  };
   return (
     <div>
       <iframe ref={iframeRef} srcDoc={doc} />
@@ -78,6 +78,11 @@ const ReactPlayground = props => {
         onChange={codeOnChange} 
         language={"javascript"} 
         value={initCode}
+      />
+      <CodeEditor 
+        onChange={styleOnChange} 
+        language={"css"} 
+        value={initStyle}
       />
     </div>
   );

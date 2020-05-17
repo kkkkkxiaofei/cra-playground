@@ -39,14 +39,16 @@ const ReactEditor = props => {
         })
         .map(e => {
           
-          const lineValue = Object.values(e.querySelectorAll('span[class^=m]')).map(subElement => subElement.innerText).join('');
+          const lineValue = 
+            Object.values(e.querySelectorAll('span[class^=m]'))
+              .map(subElement => subElement.innerText).join('');
           return lineValue;
         })
         .join('');
       console.log(currentValue)
       if (currentValue !== editorRef.current.value) {
         editorRef.current.value = currentValue;
-        onChange(currentValue);
+        onChange(currentValue.replace('&nbsp;', ' '));
       }
     };
 
