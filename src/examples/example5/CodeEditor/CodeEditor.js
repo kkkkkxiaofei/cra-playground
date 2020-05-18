@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styles from './CodeEditor.module.scss';
 import * as Monaco from 'monaco-editor';
+import { debounce } from './util';
 
 const ReactEditor = props => {
   const { onChange, value, language } = props;
@@ -50,7 +51,7 @@ const ReactEditor = props => {
       }
     };
 
-    editorRef.current.addEventListener('keyup', keyUpHandler);
+    editorRef.current.addEventListener('keyup', debounce(keyUpHandler, 1000));
 
     return () => editorRef.current.removeEventListener('keyup', keyUpHandler);
 
