@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import CodeEditor from './CodeEditor/CodeEditor';
+import styles from './index.module.scss';
+
 const iframContent = `
 <!DOCTYPE html>
 <html lang="en">
@@ -58,7 +60,7 @@ const ReactPlayground = props => {
     }
     channel = new BroadcastChannel('sw-messages');
     channel.addEventListener('message', receiver, false);
-
+    channel.postMessage({ type: 'sw', message: code });  
     return () => channel.removeEventListener('message', receiver);
   }, []);
 
@@ -72,18 +74,24 @@ const ReactPlayground = props => {
     setStyle(style.replace(/\s/g, ' '));
   };
   return (
-    <div>
-      <iframe ref={iframeRef} srcDoc={doc} />
-      <CodeEditor 
-        onChange={codeOnChange} 
-        language={"javascript"} 
-        value={initCode}
-      />
-      <CodeEditor 
-        onChange={styleOnChange} 
-        language={"css"} 
-        value={initStyle}
-      />
+    <div className={styles.playground}>
+      <div className={styles.styleWrap}>
+        <CodeEditor 
+          onChange={styleOnChange} 
+          language={"css"} 
+          value={initStyle}
+        />
+      </div>
+      <div className={styles.codeWrap}>
+        <CodeEditor 
+          onChange={codeOnChange} 
+          language={"javascript"} 
+          value={initCode}
+        />
+      </div>
+      <div className={styles.result}>
+        <iframe ref={iframeRef} srcDoc={doc} />
+      </div>
     </div>
   );
 };

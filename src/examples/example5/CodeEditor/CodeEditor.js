@@ -38,17 +38,15 @@ const ReactEditor = props => {
           return e1.style.top.replace('px', '') - e2.style.top.replace('px', '');
         })
         .map(e => {
-          
           const lineValue = 
             Object.values(e.querySelectorAll('span[class^=m]'))
               .map(subElement => subElement.innerText).join('');
           return lineValue;
         })
         .join('');
-      console.log(currentValue)
       if (currentValue !== editorRef.current.value) {
         editorRef.current.value = currentValue;
-        onChange(currentValue.replace('&nbsp;', ' '));
+        onChange(currentValue);
       }
     };
 
@@ -58,9 +56,7 @@ const ReactEditor = props => {
 
   }, []);
   return (
-    <div ref={editorRef} className={styles.editorContainer}>
-      react editor
-    </div>
+    <div ref={editorRef} className={styles.editorContainer}></div>
   );
 };
 
