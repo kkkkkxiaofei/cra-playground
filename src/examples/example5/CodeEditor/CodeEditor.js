@@ -12,7 +12,7 @@ const ReactEditor = props => {
         if (label === 'json') {
           return '/json.worker.bundle.js';
         }
-        if (label === 'css') {
+        if (label === 'scss') {
           return '/css.worker.bundle.js';
         }
         if (label === 'html') {
@@ -30,10 +30,11 @@ const ReactEditor = props => {
       {
         value,
         language,
+        theme: 'vs-dark',
       },
     );
 
-    const keyUpHandler = e => {
+    const keyUpHandler = debounce(e => {
       const currentValue = Object.values(e.target.parentElement.querySelectorAll('.view-line'))
         .sort((e1, e2) => {
           return e1.style.top.replace('px', '') - e2.style.top.replace('px', '');
@@ -49,9 +50,9 @@ const ReactEditor = props => {
         editorRef.current.value = currentValue;
         onChange(currentValue);
       }
-    };
+    }, 1000);
 
-    editorRef.current.addEventListener('keyup', debounce(keyUpHandler, 1000));
+    editorRef.current.addEventListener('keyup', keyUpHandler);
 
     return () => editorRef.current.removeEventListener('keyup', keyUpHandler);
 

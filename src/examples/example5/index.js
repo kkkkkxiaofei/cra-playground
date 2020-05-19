@@ -70,14 +70,14 @@ const ReactPlayground = props => {
 
   const codeOnChange = code => channel.postMessage({ type: 'sw', message: code });
   const styleOnChange = style => {
-    Sass.compile(style.replace(/\s/g, ' '), result => setStyle(result.text));
+    window.Sass && window.Sass.compile(style.replace(/\s/g, ' '), result => setStyle(result.text));
   };
   return (
     <div className={styles.playground}>
       <div className={styles.styleWrap}>
         <CodeEditor 
           onChange={styleOnChange} 
-          language={"sass"} 
+          language={"scss"} 
           value={initStyle}
         />
       </div>
