@@ -1,27 +1,24 @@
 .playground {
-  display: grid;
-  grid-template-columns: repeat(12, [col-start] 1fr);
-  row-gap: 20px;
-  column-gap: 20px;
-
-  .styleWrap {
-    grid-column: span 6;
-    grid-row: 1;
-    height: 400px;
-  }
-  .codeWrap {
-    grid-column: span 6;
-    grid-row: 2;
-    height: 400px;
-  }
-  .result {
-    grid-column: span 6;
-    grid-row: span 2;
+  height: 100%;
+  .editorWrap {
+    display: inline-block;
+    width: 50%;
     height: 100%;
-    iframe {
-      border: 1px solid #ccc;
-      height: 100%;
-      width: 100%;
-    }
+  }
+}
+
+.styleWrap, .codeWrap {
+  height: 50%;
+}
+
+.resultWrap {
+  display: inline-block;
+  width: 50%;
+  vertical-align: top;
+  height: 100%;
+  iframe {
+    border: 1px solid #ccc;
+    height: 100%;
+    width: 100%;
   }
 }

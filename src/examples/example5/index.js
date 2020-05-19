@@ -82,21 +82,23 @@ const ReactPlayground = props => {
 
   return (
     <div className={styles.playground}>
-      <div className={styles.styleWrap}>
-        <CodeEditor 
-          onChange={styleOnChange} 
-          language={"scss"} 
-          value={initStyle}
-        />
+      <div className={styles.editorWrap}>
+        <div className={styles.styleWrap}>
+          <CodeEditor 
+            onChange={styleOnChange} 
+            language={"scss"} 
+            value={initStyle}
+          />
+        </div>
+        <div className={styles.codeWrap}>
+          <CodeEditor 
+            onChange={codeOnChange} 
+            language={"javascript"} 
+            value={initCode}
+          />
+        </div>
       </div>
-      <div className={styles.codeWrap}>
-        <CodeEditor 
-          onChange={codeOnChange} 
-          language={"javascript"} 
-          value={initCode}
-        />
-      </div>
-      <div className={styles.result}>
+      <div className={styles.resultWrap}>
         <iframe ref={iframeRef} srcDoc={doc} />
       </div>
     </div>
