@@ -41,8 +41,10 @@ ReactDOM.render(
 `;
 
 const initStyle = `
+$color: red;
+
 .bg {
-  background-color: green;
+  background-color: $color;
 }
 `;
 const ReactPlayground = props => {
@@ -56,22 +58,28 @@ const ReactPlayground = props => {
     window.setStyle = window.setStyle || setStyle;
 
     const receiver = event => {
-      setCode(event.data.message);
-    }
+      const { type, text } = event.data;
+      switch (type) {
+        case 'code': 
+          return setCode(text);
+        case 'style': 
+          return setStyle(text);
+      }
+    };
+
     channel = new BroadcastChannel('sw-messages');
     channel.addEventListener('message', receiver, false);
-    channel.postMessage({ type: 'sw', message: code });  
+    channel.postMessage({ type: 'code', text: code });  
+    channel.postMessage({ type: 'style', text: style });  
     return () => channel.removeEventListener('message', receiver);
   }, []);
 
   const doc = useMemo(() => {
       return iframContent.replace('/* style */', style).replace('/* code */', code);
   }, [code, style]);
+  const codeOnChange = code => channel.postMessage({ type: 'code', text: code });
+  const styleOnChange = style => channel.postMessage({ type: 'style', text: style });
 
-  const codeOnChange = code => channel.postMessage({ type: 'sw', message: code });
-  const styleOnChange = style => {
-    window.Sass && window.Sass.compile(style.replace(/\s/g, ' '), result => setStyle(result.text));
-  };
   return (
     <div className={styles.playground}>
       <div className={styles.styleWrap}>
