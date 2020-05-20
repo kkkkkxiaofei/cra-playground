@@ -1,20 +1,38 @@
 .playground {
   height: 100%;
-  .editorWrap {
-    display: inline-block;
-    width: 50%;
-    height: 100%;
-  }
+  position: relative;
+}
+
+.editorWrap {
+  user-select: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48%;
+  height: 100%;
 }
 
 .styleWrap, .codeWrap {
   height: 50%;
+  width: 100%;
+}
+
+.hSplitter {
+  background-color: blue;
+  position: absolute;
+  top: 0;
+  left: 48%;
+  width: 10px;
+  height: 100%;
+  cursor: ew-resize;
 }
 
 .resultWrap {
-  display: inline-block;
-  width: 50%;
-  vertical-align: top;
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 48%;
   height: 100%;
   iframe {
     border: 1px solid #ccc;

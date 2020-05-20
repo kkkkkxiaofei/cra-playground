@@ -49,14 +49,42 @@ $color: red;
 `;
 const ReactPlayground = props => {
   const iframeRef = useRef();
+  const hSplitterRef = useRef();
+
   const [code, setCode] = useState(initCode);
   const [style, setStyle] = useState(initStyle);
+  const [splitterPosition, setSplitterPosition] = useState({
+    h: -1,
+    v: -1,
+  });
   
+  const layout = useMemo(() => {
+    const { h } = splitterPosition;
+    if (h > 0) {
+      return {
+        editorWrap: { 
+          width: `${h}px` 
+        },
+        hSplitter: { 
+          left: `${h}px`
+        },
+        resultWrap: { 
+          width: `calc(100% - 10px - ${h}px)`,
+          left: `${h + 10}px`,
+        }
+      };
+    } else {
+
+    }
+    return {
+      editorWrap: {},
+      resultWrap: {},
+    };
+  }, [splitterPosition]);
+
   let channel;
 
   useEffect(() => {
-    window.setStyle = window.setStyle || setStyle;
-
     const receiver = event => {
       const { type, text } = event.data;
       switch (type) {
@@ -70,8 +98,29 @@ const ReactPlayground = props => {
     channel = new BroadcastChannel('sw-messages');
     channel.addEventListener('message', receiver, false);
     channel.postMessage({ type: 'code', text: code });  
-    channel.postMessage({ type: 'style', text: style });  
-    return () => channel.removeEventListener('message', receiver);
+    channel.postMessage({ type: 'style', text: style });
+
+    const resize = e => {
+      console.log(e);
+      setSplitterPosition({ h: e.clientX })
+    };
+
+    const stopResize = () => {
+      window.document.removeEventListener('mousemove', resize, false);
+      window.document.removeEventListener('mouseup', stopResize, false);
+    };
+
+    const resizeInit = () => {
+      window.document.addEventListener('mousemove', resize, false);
+      window.document.addEventListener('mouseup', stopResize, false);
+    };
+
+    hSplitterRef.current.addEventListener('mousedown', resizeInit, false);
+
+    return () => {
+      channel.removeEventListener('message', receiver);
+      hSplitterRef.current.removeEventListener('mousedown', resizeInit, false);
+    };
   }, []);
 
   const doc = useMemo(() => {
@@ -82,7 +131,7 @@ const ReactPlayground = props => {
 
   return (
     <div className={styles.playground}>
-      <div className={styles.editorWrap}>
+      <div className={styles.editorWrap} style={layout['editorWrap']}>
         <div className={styles.styleWrap}>
           <CodeEditor 
             onChange={styleOnChange} 
@@ -98,7 +147,8 @@ const ReactPlayground = props => {
           />
         </div>
       </div>
-      <div className={styles.resultWrap}>
+      <div ref={hSplitterRef} className={styles.hSplitter} style={layout['hSplitter']}></div>
+      <div className={styles.resultWrap} style={layout['resultWrap']}>
         <iframe ref={iframeRef} srcDoc={doc} />
       </div>
     </div>
