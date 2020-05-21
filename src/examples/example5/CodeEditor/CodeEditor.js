@@ -45,7 +45,7 @@ const ReactEditor = props => {
               .map(subElement => subElement.innerText).join('');
           return lineValue;
         })
-        .join('');
+        .join('\n');
       if (currentValue !== editorRef.current.value) {
         editorRef.current.value = currentValue;
         onChange(currentValue);
