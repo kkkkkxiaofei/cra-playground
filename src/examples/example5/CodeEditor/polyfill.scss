@@ -1,0 +1,21 @@
+$codeNumWidth: 62px;
+
+@mixin fullSize {
+  width: 100% !important;
+  height: 100% !important;
+}
+.monaco-editor {
+  @include fullSize;
+  .overflow-guard {
+    @include fullSize;
+  }
+  .slider-mouseover {
+    display: none;
+  }
+  .monaco-scrollable-element {
+    width: calc(100% - #{$codeNumWidth}) !important;
+  }
+  .view-lines {
+    width: calc(100% + #{$codeNumWidth}) !important;
+  }
+}

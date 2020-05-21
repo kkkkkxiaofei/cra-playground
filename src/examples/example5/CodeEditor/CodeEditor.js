@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import styles from './CodeEditor.module.scss';
 import * as Monaco from 'monaco-editor';
 import { debounce } from './util';
+import './polyfill.scss';
 
 const ReactEditor = props => {
   const { onChange, value, language } = props;
