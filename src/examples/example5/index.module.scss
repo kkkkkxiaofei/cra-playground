@@ -1,38 +1,45 @@
 .playground {
   height: 100%;
   position: relative;
+  display: flex;
+}
+
+.sideBarWrap {
+  width: 200px;
+  background-color: brown;
 }
 
 .editorWrap {
   user-select: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 48%;
+  // position: absolute;
+  // top: 0;
+  // left: 0;
+  width: calc(50% - 105px);
   height: 100%;
+  .styleWrap, .codeWrap {
+    height: 50%;
+    width: 100%;
+  }
 }
 
-.styleWrap, .codeWrap {
-  height: 50%;
-  width: 100%;
-}
 
 .hSplitter {
   background-color: blue;
-  position: absolute;
-  top: 0;
-  left: 48%;
+  // position: absolute;
+  // top: 0;
+  // left: 48%;
   width: 10px;
   height: 100%;
   cursor: ew-resize;
 }
 
 .resultWrap {
+  //todo
   z-index: -1;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 48%;
+  // position: absolute;
+  // top: 0;
+  // left: 50%;
+  width: calc(50% - 105px);
   height: 100%;
   iframe {
     border: 1px solid #ccc;

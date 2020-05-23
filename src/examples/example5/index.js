@@ -54,34 +54,19 @@ const ReactPlayground = props => {
 
   const [code, setCode] = useState(initCode);
   const [style, setStyle] = useState(initStyle);
-  const [splitterPosition, setSplitterPosition] = useState({
-    h: -1,
-    v: -1,
-  });
+  const [splitterOffset, setSplitterOffset] = useState(0);
   
   const layout = useMemo(() => {
-    const { h } = splitterPosition;
-    if (h > 0) {
-      return {
-        editorWrap: { 
-          width: `${h}px` 
-        },
-        hSplitter: { 
-          left: `${h}px`
-        },
-        resultWrap: { 
-          width: `calc(100% - 10px - ${h}px)`,
-          left: `${h + 10}px`,
-        }
-      };
-    } else {
-
-    }
     return {
-      editorWrap: {},
-      resultWrap: {},
+      sideBarWrap: {},
+      editorWrap: { 
+        width: `calc(50% - 105px ${splitterOffset > 0 ? '+' : '-'} ${Math.abs(splitterOffset)}px)`
+      },
+      resultWrap: { 
+        width: `calc(50% - 105px ${splitterOffset > 0 ? '-' : '+'} ${Math.abs(splitterOffset)}px)`
+      },
     };
-  }, [splitterPosition]);
+  }, [splitterOffset]);
 
   let channel;
 
@@ -101,7 +86,7 @@ const ReactPlayground = props => {
     channel.postMessage({ type: 'code', text: code });  
     channel.postMessage({ type: 'style', text: style });
 
-    const uninstaller = elementResize(hSplitterRef.current, e => setSplitterPosition({ h: e.clientX }));
+    const uninstaller = elementResize(hSplitterRef.current, offsetX => setSplitterOffset(offsetX));
 
     return () => {
       channel.removeEventListener('message', receiver);
@@ -117,8 +102,10 @@ const ReactPlayground = props => {
 
   return (
     <div className={styles.playground}>
+      <div className={styles.sideBarWrap}></div>
+      {/* <div className={styles.hSplitter} style={layout['hSplitter']}></div> */}
       <div className={styles.editorWrap} style={layout['editorWrap']}>
-        <div className={styles.styleWrap}>
+        {/* <div className={styles.styleWrap}>
           <CodeEditor 
             onChange={styleOnChange} 
             language={"scss"} 
@@ -131,7 +118,7 @@ const ReactPlayground = props => {
             language={"javascript"} 
             value={initCode}
           />
-        </div>
+        </div> */}
       </div>
       <div ref={hSplitterRef} className={styles.hSplitter} style={layout['hSplitter']}></div>
       <div className={styles.resultWrap} style={layout['resultWrap']}>
