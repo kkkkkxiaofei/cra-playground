@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import CodeEditor from './CodeEditor/CodeEditor';
 import styles from './index.module.scss';
+import { elementResize } from '../utils';
 
 const iframContent = `
 <!DOCTYPE html>
@@ -100,26 +101,11 @@ const ReactPlayground = props => {
     channel.postMessage({ type: 'code', text: code });  
     channel.postMessage({ type: 'style', text: style });
 
-    const resize = e => {
-      console.log(e);
-      setSplitterPosition({ h: e.clientX })
-    };
-
-    const stopResize = () => {
-      window.document.removeEventListener('mousemove', resize, false);
-      window.document.removeEventListener('mouseup', stopResize, false);
-    };
-
-    const resizeInit = () => {
-      window.document.addEventListener('mousemove', resize, false);
-      window.document.addEventListener('mouseup', stopResize, false);
-    };
-
-    hSplitterRef.current.addEventListener('mousedown', resizeInit, false);
+    const uninstaller = elementResize(hSplitterRef.current, e => setSplitterPosition({ h: e.clientX }));
 
     return () => {
       channel.removeEventListener('message', receiver);
-      hSplitterRef.current.removeEventListener('mousedown', resizeInit, false);
+      uninstaller();
     };
   }, []);
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import classNames from '../util';
+import { classNames } from '../utils';
 import CoolVideoPlayer from './CoolVideoPlayer/CoolVideoPlayer';
 import styles from './index.module.scss';
 import { resources } from './util';
