@@ -1,11 +1,12 @@
 $darkTheme: #1e1e1e;
+$greyTheme: #252526;
 $greyFont: #afafaf;
 
 .playground {
   height: 100%;
   position: relative;
   display: flex;
-  background-color: $darkTheme;
+  background-color: $greyTheme;
 }
 
 .sideBarWrap {

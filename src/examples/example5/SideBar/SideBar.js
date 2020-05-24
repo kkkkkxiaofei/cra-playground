@@ -8,9 +8,9 @@ const Nav = props => {
       <div className={styles.sideBarTitle}>React Playground</div>
       <div className={styles.navList}>
         {
-          navs.map(({ cate, files }) => (
+          navs.map(({ cate: { name }, files }) => (
             <div className={styles.nav}>
-              <div className={styles.navTitle}>{cate}</div>
+              <div className={styles.navTitle}>{name}</div>
               {files.map(file => (<div onClick={() => onSelect(file)} className={styles.navItem}>{file}</div>))}
             </div>
           ))

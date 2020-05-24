@@ -1,0 +1,41 @@
+$greyFont: #afafaf;
+
+.container {
+  height: 100%;
+  text-align: left;
+}
+.panelTabs {
+  height: 34px;
+  line-height: 34px;
+  .panelTab {
+    height: 100%;
+    box-sizing: border-box;
+    display: inline-block;
+    margin: 0 10px;
+    color: $greyFont;
+    font-weight: 700;
+    &.actived {
+      color: #d4ebc2;
+      border-bottom: 1px solid #72a24d;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.panelContent {
+  position: relative;
+  height: 100%;
+  .item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    &.actived {
+      z-index: 100;
+    }
+  }
+}
+
