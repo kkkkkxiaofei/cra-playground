@@ -10,13 +10,13 @@ const ReactPlayground = () => {
     hSplitterRef = useRef(),
     sideBarSplitterRef = useRef();
 
-  const [code, setCode] = useState();
-  const [style, setStyle] = useState();
+  const [doc, setDoc] = useState();
   const [hSplitterOffset, setHsplitterOffset] = useState(0);
   const [sideBarSplitterOffset, setSideBarSplitterOffset] = useState(0);
-  const [sideBarNavs, setSideBarNavs] = useState(navs);
+  const [sideBarNavs, setSideBarNavs] = useState(navs);//todo
   const [activedKey, setActivedKey] = useState('script.js');
-  
+  const [editors, setEditors] = useState(editorConfigs);
+
   const layout = useMemo(() => {
     const splitterWidth = 5 + 5;
     const sideBarWidth = 200 + sideBarSplitterOffset;
@@ -38,19 +38,15 @@ const ReactPlayground = () => {
 
   useEffect(() => {
     const receiver = event => {
-      const { type, text } = event.data;
-      switch (type) {
-        case 'code': 
-          return setCode(text);
-        case 'style': 
-          return setStyle(text);
-      }
+      const { compiledCodes, compiledStyles } = event.data;
+      setDoc(iframeContent
+        .replace('/* style */', compiledStyles)
+        .replace('/* code */', compiledCodes)
+      );
     };
 
     channel = new BroadcastChannel('sw-messages');
     channel.addEventListener('message', receiver, false);
-    channel.postMessage({ type: 'code', text: code });  
-    channel.postMessage({ type: 'style', text: style });
 
     const hSplitterUninstaller = elementResize(hSplitterRef.current, offsetX => setHsplitterOffset(offsetX));
     const sideBarSplitterUninstaller = elementResize(sideBarSplitterRef.current, offsetX => setSideBarSplitterOffset(offsetX));
@@ -62,11 +58,13 @@ const ReactPlayground = () => {
     };
   }, []);
 
-  const doc = useMemo(() => {
-      return iframeContent.replace('/* style */', style).replace('/* code */', code);
-  }, [code, style]);
-  const codeOnChange = code => channel.postMessage({ type: 'code', text: code });
-  const styleOnChange = style => channel.postMessage({ type: 'style', text: style });
+  useEffect(() => {
+    console.log('watch editors', channel)
+    if (channel) {
+      
+      channel.postMessage(editors)
+    }
+  }, [editors]);
 
   return (
     <div className={styles.playground}>
@@ -80,29 +78,11 @@ const ReactPlayground = () => {
       <div ref={sideBarSplitterRef} className={styles.sideBarSplitter}></div>
       <div className={styles.editorWrap} style={layout['editorWrap']}>
         <CodeEditorsContainer 
-          editorConfigs={editorConfigs}
+          editors={editors}
           activedKey={activedKey}
           onSelect={setActivedKey}
+          setEditors={setEditors}
         />
-        {/* <CodeEditor 
-            onChange={styleOnChange} 
-            language={"scss"} 
-            value={initStyle}
-          /> */}
-        {/* <div className={styles.styleWrap}>
-          <CodeEditor 
-            onChange={styleOnChange} 
-            language={"scss"} 
-            value={initStyle}
-          />
-        </div>
-        <div className={styles.codeWrap}>
-          <CodeEditor 
-            onChange={codeOnChange} 
-            language={"javascript"} 
-            value={initCode}
-          />
-        </div> */}
       </div>
       <div ref={hSplitterRef} className={styles.hSplitter}></div>
       <div className={styles.resultWrap} style={layout['resultWrap']}>

@@ -70,12 +70,12 @@ const editorConfigs = [
   {
     key: 'script.js',
     language: 'javascript',
-    value: initCode,
+    source: initCode,
   },
   {
     key: 'style.scss',
     language: 'scss',
-    value: initStyle,
+    source: initStyle,
   }
 ];
 

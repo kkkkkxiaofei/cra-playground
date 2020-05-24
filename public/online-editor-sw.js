@@ -16,27 +16,49 @@ const babelInstance = Babel,
     ];
 
 const sassInstance = Sass;
-
-const compileCode = code => {
-  const compiledCode = babelInstance.transform(code, {
+  
+const compileCode = source => new Promise((resolve) => {
+  const compiledCode = babelInstance.transform(source, {
     presets: babelPresets,
     ast: false,
     compact: true,
   }).code;
-  channel.postMessage({ type: 'code', text: compiledCode });
-};
+  resolve({ 
+    language: 'javascript',
+    compiled: compiledCode
+  });
+})
 
-const compileStyle = style => sassInstance.compile(
-    style.replace(/\s/g, ' '), 
-    result => channel.postMessage({ type: 'style', text: result.text })
-);
+const compileStyle = source => new Promise((resolve) => {
+  sassInstance.compile(
+    source.replace(/\s/g, ' '), 
+    result => resolve({
+      language: 'scss',
+      compiled: result.text
+    })
+  );
+});
 
 channel.addEventListener('message', event => {
-  const { type, text } = event.data;
-  switch (type) {
-    case 'code': 
-      return compileCode(text);
-    case 'style': 
-      return compileStyle(text);
-  }
+  const editors = event.data;
+  console.log('=====0', editors);
+  Promise.all(editors.map((editor) => {
+    const { language } = editor;
+    if (language === 'javascript') {
+      return compileCode(editor);
+    }
+
+    if (language === 'scss') {
+      return compileStyle(editor);
+    }
+
+    return new Error('Only javascript and scss are supported!');
+  })).then(results => {
+    const message = {
+      compiledCodes: results.filter(({ language }) => language === 'javascript').join('\n'),
+      compiledStyles: results.filter(({ language }) => language === 'scss').join('\n')
+    };
+    console.log('=====1', message);
+    channel.postMessage(message);
+  })
 });

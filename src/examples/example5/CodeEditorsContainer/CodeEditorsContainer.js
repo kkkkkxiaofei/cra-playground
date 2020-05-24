@@ -1,18 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import CodeEditor from '../CodeEditor/CodeEditor';
 import classNames from '../../utils/classNames';
 import styles from './CodeEditorsContainer.module.scss';
 
 const CodeEditorsContainer = props => {
-  const { editorConfigs, onSelect } = props;
-  const [activedKey, setActivedKey] = useState('script.js')
+  const { editors, onSelect, activedKey, setEditors } = props;
+
+  const getEditorHandler = useMemo(() => key => value => {
+    console.log('2222')
+    setEditors(editors.map(editor => {
+      if (editor.key === key) {
+        return {
+          ...editor,
+          source: value,
+        }
+      }
+      return editor;
+    }))
+  }, [editors, setEditors]);
+
   return (
     <div className={styles.container}>
       <div className={styles.panelTabs}>
-        {editorConfigs.map(({ key }) => 
+        {editors.map(({ key }) => 
           <span 
             className={classNames(styles.panelTab, { [styles.actived]: activedKey === key })}
-            onClick={() => setActivedKey(key)}
+            onClick={() => onSelect(key)}
           >
             {key}
           </span>
@@ -20,10 +33,10 @@ const CodeEditorsContainer = props => {
       </div>
       <div className={styles.panelContent}>
         {
-          editorConfigs.map(editorConfig => {
+          editors.map(editor => {
             return (
-              <div className={classNames(styles.item, { [styles.actived]: activedKey === editorConfig.key })}>
-                <CodeEditor {...editorConfig} />
+              <div className={classNames(styles.item, { [styles.actived]: activedKey === editor.key })}>
+                <CodeEditor {...editor} onChange={getEditorHandler(editor.key)}/>
               </div>
             )
           })
