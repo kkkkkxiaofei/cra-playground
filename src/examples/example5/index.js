@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react';
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import SideBar from './SideBar/SideBar';
 import CodeEditorsContainer from './CodeEditorsContainer/CodeEditorsContainer';
 import styles from './index.module.scss';
 import { elementResize } from '../utils';
 import { iframeContent, navs, editorConfigs } from './config';
+import channel from './channel';
 
 const ReactPlayground = () => {
   const iframeRef = useRef(),
@@ -33,36 +34,34 @@ const ReactPlayground = () => {
       },
     };
   }, [hSplitterOffset, sideBarSplitterOffset]);
-
-  let channel;
-
   useEffect(() => {
     const receiver = event => {
-      const { compiledCodes, compiledStyles } = event.data;
-      setDoc(iframeContent
-        .replace('/* style */', compiledStyles)
-        .replace('/* code */', compiledCodes)
-      );
-    };
-
-    channel = new BroadcastChannel('sw-messages');
-    channel.addEventListener('message', receiver, false);
-
+      const { 
+        to, message: { compiledCodes, compiledStyles } 
+      } = event.data;
+      if (to === 'browser') {
+        setDoc(iframeContent
+          .replace('/* style */', compiledStyles)
+          .replace('/* code */', compiledCodes)
+        );
+      }
+    }
+    channel.addListener(receiver);
     const hSplitterUninstaller = elementResize(hSplitterRef.current, offsetX => setHsplitterOffset(offsetX));
     const sideBarSplitterUninstaller = elementResize(sideBarSplitterRef.current, offsetX => setSideBarSplitterOffset(offsetX));
-
+    channel.postMessage({ to: 'sw', message: editors });
     return () => {
-      channel.removeEventListener('message', receiver);
+      channel.removeListener();
       hSplitterUninstaller();
       sideBarSplitterUninstaller();
     };
   }, []);
 
   useEffect(() => {
-    console.log('watch editors', channel)
-    if (channel) {
-      
-      channel.postMessage(editors)
+    console.log('watch1')
+    if (channel.isReady()) {
+      console.log('watch2')
+      channel.postMessage({ to: 'sw', message: editors });
     }
   }, [editors]);
 

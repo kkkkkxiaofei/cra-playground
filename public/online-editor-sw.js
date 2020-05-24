@@ -40,25 +40,30 @@ const compileStyle = source => new Promise((resolve) => {
 });
 
 channel.addEventListener('message', event => {
-  const editors = event.data;
-  console.log('=====0', editors);
+  const { to, message } = event.data;
+  
+  if (to !== 'sw') return;
+
+  const editors = message;
+
   Promise.all(editors.map((editor) => {
-    const { language } = editor;
+    const { language, source } = editor;
     if (language === 'javascript') {
-      return compileCode(editor);
+      return compileCode(source);
     }
 
     if (language === 'scss') {
-      return compileStyle(editor);
+      return compileStyle(source);
     }
 
     return new Error('Only javascript and scss are supported!');
   })).then(results => {
+    const getMessageBy = type => results.filter(({ language }) => language === type).map(({ compiled }) => compiled);
+    
     const message = {
-      compiledCodes: results.filter(({ language }) => language === 'javascript').join('\n'),
-      compiledStyles: results.filter(({ language }) => language === 'scss').join('\n')
+      compiledCodes: getMessageBy('javascript').join('\n'),
+      compiledStyles: getMessageBy('scss').join('\n'),
     };
-    console.log('=====1', message);
-    channel.postMessage(message);
+    channel.postMessage({ to: 'browser', message });
   })
 });

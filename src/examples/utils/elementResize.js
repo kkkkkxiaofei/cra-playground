@@ -3,7 +3,7 @@ export default (ref, cb) => {
 	
 	const resize = e => cb && cb(e.clientX - startX);
 
-	const stopResize = e => {
+	const stopResize = () => {
 		window.document.removeEventListener('mousemove', resize, false);
 		window.document.removeEventListener('mouseup', stopResize, false);
 	};
@@ -15,6 +15,6 @@ export default (ref, cb) => {
 	};
 
 	ref.addEventListener('mousedown', resizeInit, false);
-	window.t = () => ref.removeEventListener('mousedown', resizeInit, false);
-	return window.t;
+
+	return () => ref.removeEventListener('mousedown', resizeInit, false);
 };
