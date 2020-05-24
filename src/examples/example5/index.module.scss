@@ -19,9 +19,6 @@ $greyFont: #afafaf;
 
 .editorWrap {
   user-select: none;
-  // position: absolute;
-  // top: 0;
-  // left: 0;
   width: calc(50% - 105px);
   height: 100%;
   .styleWrap, .codeWrap {
@@ -31,22 +28,15 @@ $greyFont: #afafaf;
 }
 
 
-.hSplitter {
-  background-color: blue;
-  // position: absolute;
-  // top: 0;
-  // left: 48%;
-  width: 10px;
+.hSplitter, .sideBarSplitter {
+  background-color: #ccc;
+  width: 5px;
   height: 100%;
   cursor: ew-resize;
 }
 
 .resultWrap {
-  //todo
   z-index: -1;
-  // position: absolute;
-  // top: 0;
-  // left: 50%;
   width: calc(50% - 105px);
   height: 100%;
   iframe {

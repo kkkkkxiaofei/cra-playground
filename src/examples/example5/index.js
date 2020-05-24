@@ -51,24 +51,31 @@ $color: red;
 `;
 
 const ReactPlayground = props => {
-  const iframeRef = useRef();
-  const hSplitterRef = useRef();
+  const iframeRef = useRef(),
+    hSplitterRef = useRef(),
+    sideBarSplitterRef = useRef();
 
   const [code, setCode] = useState(initCode);
   const [style, setStyle] = useState(initStyle);
-  const [splitterOffset, setSplitterOffset] = useState(0);
+  const [hSplitterOffset, setHsplitterOffset] = useState(0);
+  const [sideBarSplitterOffset, setSideBarSplitterOffset] = useState(0);
   
   const layout = useMemo(() => {
+    const splitterWidth = 5 + 5;
+    const sideBarWidth = 200 + sideBarSplitterOffset;
+    const fixedWidth = splitterWidth + sideBarWidth;
     return {
-      sideBarWrap: {},
+      sideBarWrap: {
+        width: `${sideBarWidth}px`
+      },
       editorWrap: { 
-        width: `calc(50% - 105px ${splitterOffset > 0 ? '+' : '-'} ${Math.abs(splitterOffset)}px)`
+        width: `calc(50% - ${fixedWidth / 2}px ${hSplitterOffset > 0 ? '+' : '-'} ${Math.abs(hSplitterOffset)}px)`
       },
       resultWrap: { 
-        width: `calc(50% - 105px ${splitterOffset > 0 ? '-' : '+'} ${Math.abs(splitterOffset)}px)`
+        width: `calc(50% - ${fixedWidth / 2}px ${hSplitterOffset > 0 ? '-' : '+'} ${Math.abs(hSplitterOffset)}px)`
       },
     };
-  }, [splitterOffset]);
+  }, [hSplitterOffset, sideBarSplitterOffset]);
 
   let channel;
 
@@ -88,11 +95,13 @@ const ReactPlayground = props => {
     channel.postMessage({ type: 'code', text: code });  
     channel.postMessage({ type: 'style', text: style });
 
-    const uninstaller = elementResize(hSplitterRef.current, offsetX => setSplitterOffset(offsetX));
+    const hSplitterUninstaller = elementResize(hSplitterRef.current, offsetX => setHsplitterOffset(offsetX));
+    const sideBarSplitterUninstaller = elementResize(sideBarSplitterRef.current, offsetX => setSideBarSplitterOffset(offsetX));
 
     return () => {
       channel.removeEventListener('message', receiver);
-      uninstaller();
+      hSplitterUninstaller();
+      sideBarSplitterUninstaller();
     };
   }, []);
 
@@ -104,7 +113,7 @@ const ReactPlayground = props => {
 
   return (
     <div className={styles.playground}>
-      <div className={styles.sideBarWrap}>
+      <div className={styles.sideBarWrap} style={layout['sideBarWrap']}>
         <SideBar 
           title={'React Playground'}
           navs={[
@@ -125,7 +134,7 @@ const ReactPlayground = props => {
           onSelect={null}
         />
       </div>
-      {/* <div className={styles.hSplitter} style={layout['hSplitter']}></div> */}
+      <div ref={sideBarSplitterRef} className={styles.sideBarSplitter}></div>
       <div className={styles.editorWrap} style={layout['editorWrap']}>
         <div className={styles.styleWrap}>
           <CodeEditor 
@@ -142,7 +151,7 @@ const ReactPlayground = props => {
           />
         </div>
       </div>
-      <div ref={hSplitterRef} className={styles.hSplitter} style={layout['hSplitter']}></div>
+      <div ref={hSplitterRef} className={styles.hSplitter}></div>
       <div className={styles.resultWrap} style={layout['resultWrap']}>
         <iframe ref={iframeRef} srcDoc={doc} />
       </div>
