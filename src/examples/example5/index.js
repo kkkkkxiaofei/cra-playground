@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import CodeEditor from './CodeEditor/CodeEditor';
+import SideBar from './SideBar/SideBar';
 import styles from './index.module.scss';
 import { elementResize } from '../utils';
 
@@ -48,6 +49,7 @@ $color: red;
   background-color: $color;
 }
 `;
+
 const ReactPlayground = props => {
   const iframeRef = useRef();
   const hSplitterRef = useRef();
@@ -102,10 +104,30 @@ const ReactPlayground = props => {
 
   return (
     <div className={styles.playground}>
-      <div className={styles.sideBarWrap}></div>
+      <div className={styles.sideBarWrap}>
+        <SideBar 
+          title={'React Playground'}
+          navs={[
+            {
+              cate: 'JS',
+              files: [
+                'index.js',
+                'scripts.js'
+              ]
+            },
+            {
+              cate: 'Scss',
+              files: [
+                'style.scss'
+              ]
+            },
+          ]}
+          onSelect={null}
+        />
+      </div>
       {/* <div className={styles.hSplitter} style={layout['hSplitter']}></div> */}
       <div className={styles.editorWrap} style={layout['editorWrap']}>
-        {/* <div className={styles.styleWrap}>
+        <div className={styles.styleWrap}>
           <CodeEditor 
             onChange={styleOnChange} 
             language={"scss"} 
@@ -118,7 +140,7 @@ const ReactPlayground = props => {
             language={"javascript"} 
             value={initCode}
           />
-        </div> */}
+        </div>
       </div>
       <div ref={hSplitterRef} className={styles.hSplitter} style={layout['hSplitter']}></div>
       <div className={styles.resultWrap} style={layout['resultWrap']}>

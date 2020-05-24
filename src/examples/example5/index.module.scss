@@ -1,12 +1,20 @@
+$darkTheme: #1e1e1e;
+$greyFont: #afafaf;
+
 .playground {
   height: 100%;
   position: relative;
   display: flex;
+  background-color: $darkTheme;
 }
 
 .sideBarWrap {
   width: 200px;
-  background-color: brown;
+  color: $greyFont;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px;
+  text-align: left;
 }
 
 .editorWrap {

@@ -1,0 +1,23 @@
+$greyBorder: #333333;
+
+.sideBarTitle {
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid $greyBorder;
+  box-sizing: border-box;
+}
+.navList {
+  margin-top: 10px;
+  .nav {
+    margin: 10px 0;
+  }
+}
+.navItem {
+  height: 25px;
+  line-height: 25px;
+  &:hover {
+    cursor: pointer;
+    background-color: $greyBorder;
+  }
+  font-weight: 200;
+}
