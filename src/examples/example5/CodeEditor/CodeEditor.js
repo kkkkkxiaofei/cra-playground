@@ -64,4 +64,4 @@ const ReactEditor = props => {
   );
 };
 
-export default ReactEditor;
+export default React.memo(CodeEditor, (pre, next) => pre.source === next.source);

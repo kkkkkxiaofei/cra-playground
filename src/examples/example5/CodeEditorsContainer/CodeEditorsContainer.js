@@ -48,4 +48,7 @@ const CodeEditorsContainer = props => {
   
 };
 
-export default CodeEditorsContainer;
+export default React.memo(
+  CodeEditorsContainer, 
+  (pre, next) => pre.activedKey === next.activedKey && pre.editors === next.editors
+);
