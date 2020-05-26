@@ -46,7 +46,6 @@ const initCode = `
 const { useState } = React;
 
 const Example = props => {
-  const [visible, setVisible] = useState(false);
   const [todos, setTodos] = useState([
     'Babel',
     'Canvas',
