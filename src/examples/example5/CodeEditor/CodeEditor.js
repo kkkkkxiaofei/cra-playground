@@ -4,8 +4,9 @@ import * as Monaco from 'monaco-editor';
 import { debounce } from '../../utils';
 import './polyfill.scss';
 
-const ReactEditor = props => {
+const CodeEditor = props => {
   const { onChange, source, language } = props;
+  
   const editorRef = useRef();
   useEffect(() => {
     window.MonacoEnvironment = {
@@ -36,7 +37,6 @@ const ReactEditor = props => {
     );
 
     const keyUpHandler = debounce(e => {
-      console.log('11111')
       const currentValue = Object.values(e.target.parentElement.querySelectorAll('.view-line'))
         .sort((e1, e2) => {
           return e1.style.top.replace('px', '') - e2.style.top.replace('px', '');
@@ -64,4 +64,4 @@ const ReactEditor = props => {
   );
 };
 
-export default React.memo(CodeEditor, (pre, next) => pre.source === next.source);
+export default CodeEditor;

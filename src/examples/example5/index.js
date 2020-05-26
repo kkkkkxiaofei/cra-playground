@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useMemo, useReducer, useCallback, useLayoutEffect } from 'react';
 import SideBar from './SideBar/SideBar';
 import CodeEditorsContainer from './CodeEditorsContainer/CodeEditorsContainer';
 import styles from './index.module.scss';
 import { elementResize } from '../utils';
 import { iframeContent, navs, editorConfigs } from './config';
 import channel from './channel';
+import useEditorsReducer from './useEditorsReducer';
 
 const ReactPlayground = () => {
   const iframeRef = useRef(),
@@ -16,7 +17,7 @@ const ReactPlayground = () => {
   const [sideBarSplitterOffset, setSideBarSplitterOffset] = useState(0);
   const [sideBarNavs, setSideBarNavs] = useState(navs);//todo
   const [activedKey, setActivedKey] = useState('script.js');
-  const [editors, setEditors] = useState(editorConfigs);
+  const [editors, actions] = useEditorsReducer(editorConfigs)
 
   const layout = useMemo(() => {
     const splitterWidth = 5 + 5;
@@ -34,6 +35,7 @@ const ReactPlayground = () => {
       },
     };
   }, [hSplitterOffset, sideBarSplitterOffset]);
+
   useEffect(() => {
     const receiver = event => {
       const { 
@@ -58,9 +60,7 @@ const ReactPlayground = () => {
   }, []);
 
   useEffect(() => {
-    console.log('watch1')
     if (channel.isReady()) {
-      console.log('watch2')
       channel.postMessage({ to: 'sw', message: editors });
     }
   }, [editors]);
@@ -80,7 +80,7 @@ const ReactPlayground = () => {
           editors={editors}
           activedKey={activedKey}
           onSelect={setActivedKey}
-          setEditors={setEditors}
+          updateEditor={actions.update}
         />
       </div>
       <div ref={hSplitterRef} className={styles.hSplitter}></div>

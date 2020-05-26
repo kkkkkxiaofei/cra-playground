@@ -1,24 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import CodeEditor from '../CodeEditor/CodeEditor';
 import classNames from '../../utils/classNames';
 import styles from './CodeEditorsContainer.module.scss';
 
 const CodeEditorsContainer = props => {
-  const { editors, onSelect, activedKey, setEditors } = props;
-
-  const getEditorHandler = useMemo(() => key => value => {
-    console.log('2222')
-    setEditors(editors.map(editor => {
-      if (editor.key === key) {
-        return {
-          ...editor,
-          source: value,
-        }
-      }
-      return editor;
-    }))
-  }, [editors, setEditors]);
-
+  const { editors, onSelect, activedKey, updateEditor } = props;
+  
   return (
     <div className={styles.container}>
       <div className={styles.panelTabs}>
@@ -36,7 +23,7 @@ const CodeEditorsContainer = props => {
           editors.map(editor => {
             return (
               <div className={classNames(styles.item, { [styles.actived]: activedKey === editor.key })}>
-                <CodeEditor {...editor} onChange={getEditorHandler(editor.key)}/>
+                <CodeEditor {...editor} onChange={value => updateEditor({ ...editor, source: value})} />
               </div>
             )
           })
@@ -48,7 +35,8 @@ const CodeEditorsContainer = props => {
   
 };
 
-export default React.memo(
-  CodeEditorsContainer, 
-  (pre, next) => pre.activedKey === next.activedKey && pre.editors === next.editors
-);
+// export default React.memo(
+//   CodeEditorsContainer, 
+//   (pre, next) => pre.activedKey === next.activedKey && pre.editors === next.editors
+// );
+export default CodeEditorsContainer;
