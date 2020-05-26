@@ -27,7 +27,7 @@ const CodeEditor = props => {
       }
     }
 
-    Monaco.editor.create(
+    const editorInstance = Monaco.editor.create(
       editorRef.current, 
       {
         value: source,
@@ -36,27 +36,11 @@ const CodeEditor = props => {
       },
     );
 
-    const keyUpHandler = debounce(e => {
-      const currentValue = Object.values(e.target.parentElement.querySelectorAll('.view-line'))
-        .sort((e1, e2) => {
-          return e1.style.top.replace('px', '') - e2.style.top.replace('px', '');
-        })
-        .map(e => {
-          const lineValue = 
-            Object.values(e.querySelectorAll('span[class^=m]'))
-              .map(subElement => subElement.innerText).join('');
-          return lineValue;
-        })
-        .join('\n');
-      if (currentValue !== editorRef.current.value) {
-        editorRef.current.value = currentValue;
-        onChange(currentValue);
-      }
-    }, 1000);
-
-    editorRef.current.addEventListener('keyup', keyUpHandler);
-
-    return () => editorRef.current.removeEventListener('keyup', keyUpHandler);
+    editorInstance.onDidChangeModelContent(
+      debounce(() => onChange(editorInstance.getValue()), 1000)
+    );
+    
+    return () => editorInstance.dispose();
 
   }, []);
   return (
