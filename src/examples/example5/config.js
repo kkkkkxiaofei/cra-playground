@@ -42,27 +42,73 @@ const iframeContent = `
 `;
 
 const initCode = `
-const ReactEditor = props => {
-  const [visible, setVisible] = React.useState(false);
+
+const { useState } = React;
+
+const Example = props => {
+  const [visible, setVisible] = useState(false);
+  const [todos, setTodos] = useState([
+    'Babel',
+    'Canvas',
+    'TypeScript',
+    'NodeJs and Koa',
+    'Dig out React code source',
+    'Analyse wepack packaging',
+    'Mini-program deployment',
+    'Spike live code',
+    'Web component',
+    'Cache',
+    'HTTP'
+  ]);
+  const [text, setText] = useState('');
+
+  const addTodo = content => setTodos([...todos, content]);
+
   return (
-    <div className="bg">
-      <button onClick={() => setVisible(!visible)}>click me</button>
-      {visible && <div>react editor</div>}
+    <div className='container'>
+      <div className='wrap'>
+        <div>
+        {todos.map(todo => (<div className='todo'>{todo}</div>))}
+        </div>
+        <div>
+          <input value={text} onChange={e => setText(e.target.value)} />
+          <button onClick={() => addTodo(text)}>add todo</button>
+        </div>
+      </div>
     </div>
   );
 };
 
+
 ReactDOM.render(
-  <ReactEditor />,
+  <Example />,
   document.getElementById('root')
 );
+
 `;
 
 const initStyle = `
-$color: red;
+$color: white;
+$fontWeight: 700;
+$fontSize: 20px;
+$margin: 20px;
 
-.bg {
-  background-color: $color;
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  .wrap {
+    text-align: center;
+  }
+}
+
+.todo {
+  color: $color;
+  font-weight: $fontWeight;
+  font-size: $fontSize;
+  margin: $margin;
 }
 `;
 
