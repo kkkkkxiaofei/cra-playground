@@ -6,7 +6,7 @@ const navs = [
     },
     files: [
       'index.js',
-      'scripts.js'
+      'script.js'
     ]
   },
   {

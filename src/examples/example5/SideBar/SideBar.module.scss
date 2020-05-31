@@ -17,6 +17,8 @@ $greyBorder: #333333;
   line-height: 25px;
   &:hover {
     cursor: pointer;
+  }
+  &.actived {
     background-color: $greyBorder;
   }
   font-weight: 200;

@@ -71,7 +71,8 @@ const ReactPlayground = () => {
         <SideBar 
           title={'React Playground'}
           navs={sideBarNavs}
-          onSelect={null}
+          activedKey={activedKey}
+          onSelect={setActivedKey}
         />
       </div>
       <div ref={sideBarSplitterRef} className={styles.sideBarSplitter}></div>
