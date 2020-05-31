@@ -42,6 +42,8 @@ const compileStyle = source => new Promise((resolve) => {
 channel.addEventListener('message', event => {
   const { to, message } = event.data;
   
+  console.log(to, message);
+  
   if (to !== 'sw') return;
 
   const editors = message;
@@ -61,9 +63,12 @@ channel.addEventListener('message', event => {
     const getMessageBy = type => results.filter(({ language }) => language === type).map(({ compiled }) => compiled);
     
     const message = {
-      compiledCodes: getMessageBy('javascript').join('\n'),
-      compiledStyles: getMessageBy('scss').join('\n'),
+      compiledCodes: getMessageBy('javascript'),
+      compiledStyles: getMessageBy('scss'),
     };
+
+    console.log(message);
+
     channel.postMessage({ to: 'browser', message });
   })
 });
