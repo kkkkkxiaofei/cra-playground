@@ -16,6 +16,7 @@ const ReactPlayground = () => {
   const [doc, setDoc] = useState();
   const [hSplitterOffset, setHsplitterOffset] = useState(0);
   const [sideBarSplitterOffset, setSideBarSplitterOffset] = useState(0);
+  const [consoleSplitterOffset, setConsoleSplitterOffset] = useState(0);
   const [sideBarNavs, setSideBarNavs] = useState(navs);//todo
   const [activedKey, setActivedKey] = useState('script.js');
   const [editors, actions] = useEditorsReducer(editorConfigs)
@@ -38,8 +39,16 @@ const ReactPlayground = () => {
   }, [hSplitterOffset, sideBarSplitterOffset]);
 
   const vLayout = useMemo(() => {
-
-  }, []);
+    const consoleWrapHeight = 300 - consoleSplitterOffset;
+    return {
+      consoleWrap: {
+        height: consoleWrapHeight
+      },
+      codeWrap: {
+        height: `calc(100% - 5px - ${consoleWrapHeight}px)` 
+      }
+    }
+  }, [consoleSplitterOffset]);
 
   useEffect(() => {
     const receiver = event => {
@@ -54,13 +63,15 @@ const ReactPlayground = () => {
       }
     }
     channel.addListener(receiver);
-    const hSplitterUninstaller = elementResize(hSplitterRef.current, offsetX => setHsplitterOffset(offsetX));
-    const sideBarSplitterUninstaller = elementResize(sideBarSplitterRef.current, offsetX => setSideBarSplitterOffset(offsetX));
+    const hSplitterUninstaller = elementResize(hSplitterRef.current, setHsplitterOffset);
+    const sideBarSplitterUninstaller = elementResize(sideBarSplitterRef.current, setSideBarSplitterOffset);
+    const consoleSplitterUninstaller = elementResize(consoleSplitterRef.current, setConsoleSplitterOffset, 'v');
     channel.postMessage({ to: 'sw', message: editors });
     return () => {
       channel.removeListener();
       hSplitterUninstaller();
       sideBarSplitterUninstaller();
+      consoleSplitterUninstaller();
     };
   }, []);
 
@@ -82,7 +93,7 @@ const ReactPlayground = () => {
       </div>
       <div ref={sideBarSplitterRef} className={styles.sideBarSplitter}></div>
       <div className={styles.editorWrap} style={hLayout['editorWrap']}>
-        <div className={styles.codeWrap}>
+        <div className={styles.codeWrap} style={vLayout['codeWrap']}>
           <CodeEditorsContainer 
             editors={editors}
             activedKey={activedKey}
@@ -91,7 +102,7 @@ const ReactPlayground = () => {
           />
         </div>
         <div ref={consoleSplitterRef} className={styles.consoleSplitter}></div>
-        <div className={styles.consoleWrap}></div>
+        <div className={styles.consoleWrap} style={vLayout['consoleWrap']}></div>
       </div>
       <div ref={hSplitterRef} className={styles.hSplitter}></div>
       <div className={styles.resultWrap} style={hLayout['resultWrap']}>
