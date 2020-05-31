@@ -3,6 +3,8 @@ $greyFont: #afafaf;
 .container {
   height: 100%;
   text-align: left;
+  display: flex;
+  flex-direction: column;
 }
 .panelTabs {
   height: 34px;

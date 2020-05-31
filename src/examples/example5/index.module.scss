@@ -2,6 +2,8 @@ $darkTheme: #1e1e1e;
 $greyTheme: #252526;
 $greyFont: #afafaf;
 
+$consoleHeight: 300px;
+
 .playground {
   height: 100%;
   position: relative;
@@ -22,9 +24,19 @@ $greyFont: #afafaf;
   user-select: none;
   width: calc(50% - 105px);
   height: 100%;
-  .styleWrap, .codeWrap {
-    height: 50%;
+  .codeWrap {
+    height: calc(100% - #{$consoleHeight} - 5px);
+  }
+  .consoleSplitter {
+    background-color: #ccc;
+    height: 5px;
     width: 100%;
+    cursor: ns-resize;
+  }
+  .consoleWrap {
+    height: $consoleHeight;
+    border-radius: 4px;
+    border: 1px solid $greyFont;
   }
 }
 

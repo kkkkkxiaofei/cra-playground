@@ -10,7 +10,8 @@ import useEditorsReducer from './useEditorsReducer';
 const ReactPlayground = () => {
   const iframeRef = useRef(),
     hSplitterRef = useRef(),
-    sideBarSplitterRef = useRef();
+    sideBarSplitterRef = useRef(),
+    consoleSplitterRef = useRef();
 
   const [doc, setDoc] = useState();
   const [hSplitterOffset, setHsplitterOffset] = useState(0);
@@ -19,7 +20,7 @@ const ReactPlayground = () => {
   const [activedKey, setActivedKey] = useState('script.js');
   const [editors, actions] = useEditorsReducer(editorConfigs)
 
-  const layout = useMemo(() => {
+  const hLayout = useMemo(() => {
     const splitterWidth = 5 + 5;
     const sideBarWidth = 200 + sideBarSplitterOffset;
     const fixedWidth = splitterWidth + sideBarWidth;
@@ -35,6 +36,10 @@ const ReactPlayground = () => {
       },
     };
   }, [hSplitterOffset, sideBarSplitterOffset]);
+
+  const vLayout = useMemo(() => {
+
+  }, []);
 
   useEffect(() => {
     const receiver = event => {
@@ -67,7 +72,7 @@ const ReactPlayground = () => {
 
   return (
     <div className={styles.playground}>
-      <div className={styles.sideBarWrap} style={layout['sideBarWrap']}>
+      <div className={styles.sideBarWrap} style={hLayout['sideBarWrap']}>
         <SideBar 
           title={'React Playground'}
           navs={sideBarNavs}
@@ -76,16 +81,20 @@ const ReactPlayground = () => {
         />
       </div>
       <div ref={sideBarSplitterRef} className={styles.sideBarSplitter}></div>
-      <div className={styles.editorWrap} style={layout['editorWrap']}>
-        <CodeEditorsContainer 
-          editors={editors}
-          activedKey={activedKey}
-          onSelect={setActivedKey}
-          updateEditor={actions.update}
-        />
+      <div className={styles.editorWrap} style={hLayout['editorWrap']}>
+        <div className={styles.codeWrap}>
+          <CodeEditorsContainer 
+            editors={editors}
+            activedKey={activedKey}
+            onSelect={setActivedKey}
+            updateEditor={actions.update}
+          />
+        </div>
+        <div ref={consoleSplitterRef} className={styles.consoleSplitter}></div>
+        <div className={styles.consoleWrap}></div>
       </div>
       <div ref={hSplitterRef} className={styles.hSplitter}></div>
-      <div className={styles.resultWrap} style={layout['resultWrap']}>
+      <div className={styles.resultWrap} style={hLayout['resultWrap']}>
         <iframe ref={iframeRef} srcDoc={doc} />
       </div>
     </div>
