@@ -1,14 +1,16 @@
 $darkTheme: #1e1e1e;
 $greyTheme: #252526;
 $greyFont: #afafaf;
+$errorColor: #ce9178;
 
-$consoleHeight: 300px;
+$consoleHeight: 150px;
 
 .playground {
   height: 100%;
   position: relative;
   display: flex;
   background-color: $greyTheme;
+  text-align: left;
 }
 
 .sideBarWrap {
@@ -17,15 +19,17 @@ $consoleHeight: 300px;
   font-weight: 700;
   font-size: 14px;
   padding: 10px;
-  text-align: left;
 }
 
 .editorWrap {
   user-select: none;
   width: calc(50% - 105px);
   height: 100%;
+  display: flex;
+  flex-direction: column;
   .codeWrap {
     height: calc(100% - #{$consoleHeight} - 5px);
+    overflow: hidden;
   }
   .consoleSplitter {
     background-color: #ccc;
@@ -37,6 +41,18 @@ $consoleHeight: 300px;
     height: $consoleHeight;
     border-radius: 4px;
     border: 1px solid $greyFont;
+    box-sizing: border-box;
+    margin: 4px;
+    padding: 4px;
+    .title {
+      color: $greyFont;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .body {
+      color: $errorColor;
+      word-break: break-word;
+    }
   }
 }
 

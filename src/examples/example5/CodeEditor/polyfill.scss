@@ -14,6 +14,7 @@ $codeNumWidth: 62px;
   }
   .monaco-scrollable-element {
     width: calc(100% - #{$codeNumWidth}) !important;
+    height: 100% !important;
   }
   .view-lines {
     width: calc(100% + #{$codeNumWidth}) !important;

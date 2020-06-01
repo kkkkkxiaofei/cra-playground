@@ -17,16 +17,22 @@ const babelInstance = Babel,
 
 const sassInstance = Sass;
   
-const compileCode = source => new Promise((resolve) => {
-  const compiledCode = babelInstance.transform(source, {
-    presets: babelPresets,
-    ast: false,
-    compact: true,
-  }).code;
-  resolve({ 
-    language: 'javascript',
-    compiled: compiledCode
-  });
+const compileCode = source => new Promise((resolve, reject) => {
+  let compiledCode;
+
+  try {
+    compiledCode = babelInstance.transform(source, {
+      presets: babelPresets,
+      ast: false,
+      compact: true,
+    }).code;
+    resolve({ 
+      language: 'javascript',
+      compiled: compiledCode
+    });
+  } catch(e) {
+    reject(e);
+  }
 })
 
 const compileStyle = source => new Promise((resolve) => {
@@ -41,8 +47,6 @@ const compileStyle = source => new Promise((resolve) => {
 
 channel.addEventListener('message', event => {
   const { to, message } = event.data;
-  
-  console.log(to, message);
   
   if (to !== 'sw') return;
 
@@ -70,5 +74,7 @@ channel.addEventListener('message', event => {
     console.log(message);
 
     channel.postMessage({ to: 'browser', message });
+  }).catch(error => {
+    channel.postMessage({ to: 'browser', message: { error } });
   })
 });

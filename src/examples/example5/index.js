@@ -20,6 +20,7 @@ const ReactPlayground = () => {
   const [sideBarNavs, setSideBarNavs] = useState(navs);//todo
   const [activedKey, setActivedKey] = useState('script.js');
   const [editors, actions] = useEditorsReducer(editorConfigs)
+  const [consoleLog, setConsoleLog] = useState('');
 
   const hLayout = useMemo(() => {
     const splitterWidth = 5 + 5;
@@ -39,7 +40,7 @@ const ReactPlayground = () => {
   }, [hSplitterOffset, sideBarSplitterOffset]);
 
   const vLayout = useMemo(() => {
-    const consoleWrapHeight = 300 - consoleSplitterOffset;
+    const consoleWrapHeight = 150 - consoleSplitterOffset;
     return {
       consoleWrap: {
         height: consoleWrapHeight
@@ -53,13 +54,17 @@ const ReactPlayground = () => {
   useEffect(() => {
     const receiver = event => {
       const { 
-        to, message: { compiledCodes, compiledStyles } 
+        to, message: { compiledCodes, compiledStyles, error } 
       } = event.data;
       if (to === 'browser') {
-        setDoc(iframeContent
-          .replace('/* style */', compiledStyles)
-          .replace('/* code */', compiledCodes)
-        );
+        if (error) {
+          setConsoleLog(error.stack);
+        } else {
+          setDoc(iframeContent
+            .replace('/* style */', compiledStyles)
+            .replace('/* code */', compiledCodes)
+          );
+        }
       }
     }
     channel.addListener(receiver);
@@ -102,7 +107,10 @@ const ReactPlayground = () => {
           />
         </div>
         <div ref={consoleSplitterRef} className={styles.consoleSplitter}></div>
-        <div className={styles.consoleWrap} style={vLayout['consoleWrap']}></div>
+        <div className={styles.consoleWrap} style={vLayout['consoleWrap']}>
+          <div className={styles.title}>Console</div>
+          <div className={styles.body}>{consoleLog}</div>
+        </div>
       </div>
       <div ref={hSplitterRef} className={styles.hSplitter}></div>
       <div className={styles.resultWrap} style={hLayout['resultWrap']}>
