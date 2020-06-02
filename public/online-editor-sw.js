@@ -71,10 +71,8 @@ channel.addEventListener('message', event => {
       compiledStyles: getMessageBy('scss'),
     };
 
-    console.log(message);
-
     channel.postMessage({ to: 'browser', message });
   }).catch(error => {
-    channel.postMessage({ to: 'browser', message: { error } });
+    channel.postMessage({ to: 'browser', message: { error: error.stack, compiledCodes: '', compiledStyles: '' } });
   })
 });

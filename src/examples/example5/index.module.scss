@@ -44,6 +44,17 @@ $consoleHeight: 150px;
     box-sizing: border-box;
     margin: 4px;
     padding: 4px;
+    overflow: auto;
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(121, 121, 121, .4);
+    }
+    &::-webkit-scrollbar-corner {
+      background: $darkTheme;
+    }
     .title {
       color: $greyFont;
       font-weight: 700;
@@ -51,7 +62,6 @@ $consoleHeight: 150px;
     }
     .body {
       color: $errorColor;
-      word-break: break-word;
     }
   }
 }

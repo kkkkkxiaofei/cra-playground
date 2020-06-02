@@ -13,6 +13,10 @@ const ReactPlayground = () => {
     sideBarSplitterRef = useRef(),
     consoleSplitterRef = useRef();
 
+  const [compiledOutput, setcompiledOutput] = useState({
+    output: null,
+    error: null,
+  });
   const [doc, setDoc] = useState();
   const [hSplitterOffset, setHsplitterOffset] = useState(0);
   const [sideBarSplitterOffset, setSideBarSplitterOffset] = useState(0);
@@ -57,14 +61,13 @@ const ReactPlayground = () => {
         to, message: { compiledCodes, compiledStyles, error } 
       } = event.data;
       if (to === 'browser') {
-        if (error) {
-          setConsoleLog(error.stack);
-        } else {
-          setDoc(iframeContent
+        console.log(event.data);
+        setcompiledOutput({
+          output: iframeContent
             .replace('/* style */', compiledStyles)
-            .replace('/* code */', compiledCodes)
-          );
-        }
+            .replace('/* code */', compiledCodes),
+          error
+        })
       }
     }
     channel.addListener(receiver);
@@ -109,12 +112,14 @@ const ReactPlayground = () => {
         <div ref={consoleSplitterRef} className={styles.consoleSplitter}></div>
         <div className={styles.consoleWrap} style={vLayout['consoleWrap']}>
           <div className={styles.title}>Console</div>
-          <div className={styles.body}>{consoleLog}</div>
+          <div className={styles.body}>
+            <pre>{compiledOutput.error}</pre>
+          </div>
         </div>
       </div>
       <div ref={hSplitterRef} className={styles.hSplitter}></div>
       <div className={styles.resultWrap} style={hLayout['resultWrap']}>
-        <iframe ref={iframeRef} srcDoc={doc} />
+        <iframe ref={iframeRef} srcDoc={compiledOutput.output} />
       </div>
     </div>
   );
