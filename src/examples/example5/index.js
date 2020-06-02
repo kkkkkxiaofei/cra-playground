@@ -17,14 +17,12 @@ const ReactPlayground = () => {
     output: null,
     error: null,
   });
-  const [doc, setDoc] = useState();
   const [hSplitterOffset, setHsplitterOffset] = useState(0);
   const [sideBarSplitterOffset, setSideBarSplitterOffset] = useState(0);
   const [consoleSplitterOffset, setConsoleSplitterOffset] = useState(0);
   const [sideBarNavs, setSideBarNavs] = useState(navs);//todo
   const [activedKey, setActivedKey] = useState('script.js');
   const [editors, actions] = useEditorsReducer(editorConfigs)
-  const [consoleLog, setConsoleLog] = useState('');
 
   const hLayout = useMemo(() => {
     const splitterWidth = 5 + 5;
@@ -61,7 +59,6 @@ const ReactPlayground = () => {
         to, message: { compiledCodes, compiledStyles, error } 
       } = event.data;
       if (to === 'browser') {
-        console.log(event.data);
         setcompiledOutput({
           output: iframeContent
             .replace('/* style */', compiledStyles)

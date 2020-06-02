@@ -47,7 +47,6 @@ const compileStyle = source => new Promise((resolve) => {
 
 channel.addEventListener('message', event => {
   const { to, message } = event.data;
-  
   if (to !== 'sw') return;
 
   const editors = message;
