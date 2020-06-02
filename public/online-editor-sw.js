@@ -35,13 +35,21 @@ const compileCode = source => new Promise((resolve, reject) => {
   }
 })
 
-const compileStyle = source => new Promise((resolve) => {
+const compileStyle = source => new Promise((resolve, reject) => {
   sassInstance.compile(
     source.replace(/\s/g, ' '), 
-    result => resolve({
-      language: 'scss',
-      compiled: result.text
-    })
+    result => {
+      const { status, text, formatted } = result;
+      console.log(result);
+      if (status === 0) {//OK
+        resolve({
+          language: 'scss',
+          compiled: text
+        })
+      } else {
+        reject({ stack: formatted });
+      }
+    }
   );
 });
 
