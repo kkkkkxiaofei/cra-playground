@@ -1,12 +1,29 @@
-import React from 'react';
-import dataFetcher from './api';
+import React, { useState, useEffect } from 'react';
+import { fetchCountry, fetchCities } from './api';
 
-const SuspenseComponent = () => {
-  const result = dataFetcher.read();
-  return (<div>
-    <h1>hello suspense component</h1>
-    <div>{result}</div>
-  </div>);
+const Country = props => {
+  const { id, fetchCountry } = props;
+  const [country, setCountry] = useState();
+
+  useEffect(() => {
+    fetchCountry(id).then(result => setCountry(result))
+  },[id])
+  
+  return (
+    <div>
+      <h1>{country}</h1>
+    </div>
+  )
 }
 
-export default SuspenseComponent;
+const SuspenseExample = () => {
+  const [id, setId] = useState(0);
+  return (
+    <div>
+      <button onClick={() => setId(id + 1)}>next</button>
+      <Country id={id} fetchCountry={fetchCountry} />
+    </div>
+  );
+}
+
+export default SuspenseExample;
