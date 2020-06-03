@@ -1,14 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { fetchCountry, fetchCities } from './api';
+import React, { useState, useEffect, Suspense } from 'react';
+import createResource from './api';
 
 const Country = props => {
-  const { id, fetchCountry } = props;
-  const [country, setCountry] = useState();
-
-  useEffect(() => {
-    fetchCountry(id).then(result => setCountry(result))
-  },[id])
-  
+  const country = props.resouce.read();
   return (
     <div>
       <h1>{country}</h1>
@@ -17,11 +11,13 @@ const Country = props => {
 }
 
 const SuspenseExample = () => {
-  const [id, setId] = useState(0);
+  const [resource, setResource] = useState(createResource(0));
   return (
     <div>
-      <button onClick={() => setId(id + 1)}>next</button>
-      <Country id={id} fetchCountry={fetchCountry} />
+      <button onClick={() => setResource(createResource(resource.id + 1))}>next</button>
+      <Suspense fallback={<div>Country is loading...</div>}>
+        <Country resouce={resource.countryResource} />
+      </Suspense>
     </div>
   );
 }

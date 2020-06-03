@@ -31,8 +31,12 @@ const cities = [
 ];
 
 export const fetchCountry = id => {
+  console.log(`start to fetch country ${id}`);
   return new Promise(resolve => {
-    setTimeout(() => resolve(countries[id % countries.length]), 3000 * Math.random());
+    setTimeout(() => {
+      console.log(`country ${id} is resolved`);
+      resolve(countries[id % countries.length]);
+    }, 3000 * Math.random());
   })
 };
 
@@ -42,8 +46,8 @@ export const fetchCities = id => {
   })
 }
 
-export default wrapPromise(
-  new Promise((resolve) => {
-    setTimeout(() => resolve("this the response from api"), 3000);
-  })
-);
+export default id => ({
+  id,
+  countryResource: wrapPromise(fetchCountry(id)),
+  cityResource: wrapPromise(fetchCities(id)) 
+});
