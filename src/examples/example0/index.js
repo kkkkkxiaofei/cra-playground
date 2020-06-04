@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import createResource from './api';
+import MySuspense from './MySuspense';
 
 const Country = props => {
   const country = props.resouce.read();
@@ -15,9 +16,9 @@ const SuspenseExample = () => {
   return (
     <div>
       <button onClick={() => setResource(createResource(resource.id + 1))}>next</button>
-      <Suspense fallback={<div>Country is loading...</div>}>
+      <MySuspense fallback={<div>C1ountry is loading1...</div>}>
         <Country resouce={resource.countryResource} />
-      </Suspense>
+      </MySuspense>
     </div>
   );
 }

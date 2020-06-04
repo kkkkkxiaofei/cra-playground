@@ -8,6 +8,8 @@ import {
  Route,
 } from 'react-router-dom';
 
+import Example0 from './examples/example0';
+
 const store = createStore(
   appReducer, 
   compose(window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f)
@@ -18,7 +20,7 @@ function App() {
     <Provider store={store}>
       <div className="App">
         <BrowserRouter>
-          <Suspense fallback={(<div>loading...</div>)}>
+          {/* <Suspense fallback={(<div>loading...</div>)}>
             {
             [...Array(99)].map(
                 ($, index) => (
@@ -30,7 +32,8 @@ function App() {
                 )
               )
             }
-          </Suspense>
+          </Suspense> */}
+          <Route path={'/examples/0'} component={Example0} />
         </BrowserRouter>
       </div>
 

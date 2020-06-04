@@ -1,3 +1,10 @@
+class MyError extends Error {
+  constructor(p, ...others) {
+    super(...others);
+    this.promise = p;
+  }
+}
+
 const wrapPromise = promise => {
   let status = 'pending';
   let result;
@@ -13,17 +20,18 @@ const wrapPromise = promise => {
 
   return {
     read: () => {
+      console.log(status, '========')
       switch(status) {
         case 'pending': throw promise;
         case 'resolved': return result;
-        case 'rejected': throw result;
-        default: throw result;
+        case 'rejected': throw new Error(result);
+        default: throw new Error(result);
       }
     }
   }
 }
 
-const countries = ['China', 'Aus', 'US'];
+const countries = ['China0', 'Aus1', 'US2'];
 const cities = [
   [`Xi'an`, 'Shang hai', 'Bei jing'],
   ['Sydney', 'Mel', 'Brisbane'],
