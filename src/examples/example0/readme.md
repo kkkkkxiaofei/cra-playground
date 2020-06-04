@@ -1,1 +1,1 @@
-The implementation of MySuspense can work under React 16.2, you can not use it in lastest(16.13) because the Suspense works perfectly;
+The implementation of MySuspense can work under React 16.2, but you can not use it in latest(16.13) because the Suspense works perfectly;

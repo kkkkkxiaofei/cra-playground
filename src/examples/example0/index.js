@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import createResource from './api';
-import MySuspense from './MySuspense';
 
 const Country = props => {
   const country = props.resouce.read();
@@ -15,10 +14,11 @@ const SuspenseExample = () => {
   const [resource, setResource] = useState(createResource(0));
   return (
     <div>
+      <p>The implementation of MySuspense can work under React 16.2, but you can not use it in latest(16.13) because the Suspense works perfectly;</p>
       <button onClick={() => setResource(createResource(resource.id + 1))}>next</button>
-      <MySuspense fallback={<div>C1ountry is loading1...</div>}>
+      <Suspense fallback={<div>C1ountry is loading1...</div>}>
         <Country resouce={resource.countryResource} />
-      </MySuspense>
+      </Suspense>
     </div>
   );
 }
