@@ -20,7 +20,15 @@ const CustomRenderExample = () => {
     Render.render(<Counter />, newRoot);
   }
 
-  return <button onClick={() => start()}>click me to render</button>
+  return { 
+    $$typeof: Symbol.for('react.element'), 
+    type: 'button', 
+    ref: null,
+    props: { 
+      children: 'click me to render',
+      onClick: () => start()
+    }
+  }
 }
 
 export default CustomRenderExample;
