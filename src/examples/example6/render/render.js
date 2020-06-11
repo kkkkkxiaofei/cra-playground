@@ -33,6 +33,7 @@ const hostConfig = {
           domElement.textContent = propValue;
         }
       } else if (propName === 'onClick') {
+        domElement.removeEventListener('click', oldProps[propName]);
         domElement.addEventListener('click', propValue);
       } else if (propName === 'className') {
         domElement.setAttribute('class', propValue);
