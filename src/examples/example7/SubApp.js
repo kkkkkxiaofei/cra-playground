@@ -2,6 +2,10 @@ import React, { Suspense } from 'react';
 import { Provider } from 'react-redux';
 import { createStore, compose } from 'redux';
 import subAppReducer from './reducer';
+import { routes } from './routes';
+import {
+  BrowserRouter,
+ } from 'react-router-dom';
 
 const store = createStore(
   subAppReducer, 
@@ -11,6 +15,11 @@ const store = createStore(
 function SubApp() {
   return (
     <Provider store={store}>
+      <BrowserRouter>
+        {
+          routes.map(Route => (<Route />))
+        }
+      </BrowserRouter>
       <div>
         this is subApp
       </div>

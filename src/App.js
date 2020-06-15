@@ -5,8 +5,9 @@ import './App.css';
 import appReducer from './reducer';
 import {
  BrowserRouter,
- Route,
 } from 'react-router-dom';
+import StaticRoutes from './routes/StaticRoutes';
+import DynamicRoutes from './routes/DynamicRoutes';
 
 const store = createStore(
   appReducer, 
@@ -19,17 +20,8 @@ function App() {
       <div className="App">
         <BrowserRouter>
           <Suspense fallback={(<div>loading...</div>)}>
-            {
-            [...Array(99)].map(
-                ($, index) => (
-                  <Route 
-                    exac 
-                    path={`/examples/${index}`}  
-                    render={() => { const Component = React.lazy(() => import(`./examples/example${index}/index`)); return <Component />; }} 
-                  />
-                )
-              )
-            }
+            {/* <StaticRoutes /> */}
+            <DynamicRoutes />
           </Suspense>
         </BrowserRouter>
       </div>
