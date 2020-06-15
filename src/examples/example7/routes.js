@@ -1,6 +1,6 @@
 import React from 'react';
-import RoutesForFruitProject from './FruitProject/routes';
-import RoutesForSchoolProject from './SchoolProject/routes';
+import RoutesForFruitProject from './FruitProject';
+import RoutesForSchoolProject from './SchoolProject';
 
 export const routes = {
   sub1: <RoutesForFruitProject />,

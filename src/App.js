@@ -4,13 +4,10 @@ import { createStore, compose } from 'redux';
 import './App.css';
 import appReducer from './reducer';
 import {
- BrowserRouter,
+ BrowserRouter, Route
 } from 'react-router-dom';
 import StaticRoutes from './routes/StaticRoutes';
 import DynamicRoutes from './routes/DynamicRoutes';
-import {
-  Route,
- } from 'react-router-dom';
 
 const store = createStore(
   appReducer, 
