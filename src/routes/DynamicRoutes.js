@@ -7,7 +7,6 @@ const DynamicRoutes = () => {
 
   useEffect(() => {
     import(`../examples/example7/routes`).then(result => {
-      console.log(result.routes[`sub${id}`], 'done');
       setRouteComponent(result.routes[`sub${id}`]);
     })
   }, []);

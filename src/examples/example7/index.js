@@ -1,14 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const SubAppContainer = () => {
-  // const [isLoading, setIsLoading] = useState(true);
-  // useEffect(() => {
-  //   ReactDOM.render(<SubApp />, document.getElementById('sub1'));
-  //   setIsLoading(false)    
-  // }, []);
-  
-  // return isLoading && <div>loading subapp...</div>;
-  return <div>loading subapp...</div>
+const Container = () => {
+  return (
+    <div>
+      <div>
+        <Link to={'/examples/subapps/1'}>subapp1</Link>
+      </div>
+      <div>
+        <Link to={'/examples/subapps/2'}>subapp2</Link>
+      </div>
+    </div>
+  )
 }
 
-export default SubAppContainer;
+export default Container;
