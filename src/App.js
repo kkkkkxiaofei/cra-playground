@@ -8,6 +8,9 @@ import {
 } from 'react-router-dom';
 import StaticRoutes from './routes/StaticRoutes';
 import DynamicRoutes from './routes/DynamicRoutes';
+import {
+  Route,
+ } from 'react-router-dom';
 
 const store = createStore(
   appReducer, 
@@ -20,8 +23,12 @@ function App() {
       <div className="App">
         <BrowserRouter>
           <Suspense fallback={(<div>loading...</div>)}>
-            {/* <StaticRoutes /> */}
-            <DynamicRoutes />
+            <StaticRoutes />
+            <Route 
+              exac
+              path={`/examples/subapps/:id`}  
+              children={<DynamicRoutes />} 
+            />
           </Suspense>
         </BrowserRouter>
       </div>

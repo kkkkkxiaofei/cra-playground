@@ -1,24 +1,18 @@
 import React, { useState, useEffect, lazy } from 'react';
-import { routes as routesForSub1 } from '../examples/example7/routes';
-import StaticRoutes from './StaticRoutes';
+import { useParams } from 'react-router-dom';
 
-const subAppPath = {
-  sub1: '../examples/example7/routes'
-}
-
-const DynamicRoutes = props => {
-  const [route, setRoute] = useState(null);
+const DynamicRoutes = () => {
+  const [RouteComponent, setRouteComponent] = useState(null);
+  const { id } = useParams();
 
   useEffect(() => {
-    // const Component = lazy(() => import('./StaticRoutes'));
-    // setRoute(Component);
-    import(`../examples/example${1+6}/routes`).then(result => {
-      console.log(result.routes, 'done');
-      setRoute(result.routes)
+    import(`../examples/example7/routes`).then(result => {
+      console.log(result.routes[`sub${id}`], 'done');
+      setRouteComponent(result.routes[`sub${id}`]);
     })
   }, []);
 
-  return route || null;
+  return RouteComponent ? RouteComponent: <div>loading routes for subapp{id}</div>;
 };
 
 export default DynamicRoutes;

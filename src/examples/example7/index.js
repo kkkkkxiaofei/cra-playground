@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import SubApp from './SubApp';
-import ReactDOM from 'react-dom';
+import React from 'react';
 
 const SubAppContainer = () => {
   // const [isLoading, setIsLoading] = useState(true);
