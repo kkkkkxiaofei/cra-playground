@@ -2,11 +2,11 @@ import React from 'react';
 import {
   Route,
  } from 'react-router-dom';
-import User from './components/Student';
+import Schools from './components/Schools';
 
 export default () =>
   <Route 
       exac 
-      path={`/examples/subapps/2`}
-      children={<User />}
+      path={`/examples/7/subapps/2`}
+      children={<Schools />}
     />

@@ -3,11 +3,8 @@ import { Provider } from 'react-redux';
 import { createStore, compose } from 'redux';
 import './App.css';
 import appReducer from './reducer';
-import {
- BrowserRouter, Route
-} from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import StaticRoutes from './routes/StaticRoutes';
-import DynamicRoutes from './routes/DynamicRoutes';
 
 const store = createStore(
   appReducer, 
@@ -21,11 +18,6 @@ function App() {
         <BrowserRouter>
           <Suspense fallback={(<div>loading...</div>)}>
             <StaticRoutes />
-            <Route 
-              exac
-              path={`/examples/subapps/:id`}  
-              children={<DynamicRoutes />} 
-            />
           </Suspense>
         </BrowserRouter>
       </div>

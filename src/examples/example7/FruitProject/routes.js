@@ -2,13 +2,13 @@ import React from 'react';
 import {
   Route,
  } from 'react-router-dom';
-import Apple from './components/Apple';
+import Fruits from './components/Fruits';
 
 export default () => {
   return (
     <Route
-      path={`/examples/subapps/1`}
-      children={<Apple />}
+      path={`/examples/7/subapps/1`}
+      children={<Fruits />}
     />
   )
 }
