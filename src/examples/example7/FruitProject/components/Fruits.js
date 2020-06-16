@@ -14,7 +14,9 @@ const Fruits = () => {
       <div>
         <Link to={`${url}/orange`}>orange</Link>
       </div>
-      <Route path={`${path}/:name`} children={<Fruit />} />
+      <Route path={`${path}/:name`}>
+        <Fruit />
+      </Route>
     </div>
   )
 }

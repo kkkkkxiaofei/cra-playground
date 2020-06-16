@@ -3,13 +3,22 @@ import {
   Route,
  } from 'react-router-dom';
 
+const cache = {};
+
 const StaticRoutes = () => {
   return [...Array(99)].map(
     ($, index) => (
       <Route 
-        exac 
         path={`/examples/${index}`}  
-        render={() => { const Component = React.lazy(() => import(`../examples/example${index}/index`)); return <Component />; }} 
+        render={() => {
+          // you have to expose the path when using dynamic import, that may be the issue of webpack
+          if (!cache[`../examples/example${index}/index`]) {
+            const Component = React.lazy(() => import(`../examples/example${index}/index`)); 
+            cache[`../examples/example${index}/index`] = <Component />
+          }
+          
+          return cache[`../examples/example${index}/index`];
+        }} 
       />
     )
   );

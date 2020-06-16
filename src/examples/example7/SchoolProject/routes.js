@@ -4,9 +4,9 @@ import {
  } from 'react-router-dom';
 import Schools from './components/Schools';
 
-export default () =>
-  <Route 
-      exac 
-      path={`/examples/7/subapps/2`}
-      children={<Schools />}
-    />
+export default () => (
+  <Route path={`/examples/7/subapps/2`}>
+    <Schools />
+  </Route>
+);
+  

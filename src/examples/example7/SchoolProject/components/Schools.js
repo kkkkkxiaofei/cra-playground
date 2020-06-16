@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouteMatch, Route, Link } from 'react-router-dom';
 import School from './School';
 
-const Fruits = () => {
+const Schools = () => {
   const { path, url } = useRouteMatch();
 
   return (
@@ -14,9 +14,11 @@ const Fruits = () => {
       <div>
       <Link to={`${url}/high-school`}>high school</Link>
       </div>
-      <Route path={`${path}/:name`} children={<School />} />
+      <Route path={`${path}/:name`}>
+        <School />
+      </Route>
     </div>
   )
 }
 
-export default Fruits;
+export default Schools;
