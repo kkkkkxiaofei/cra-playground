@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-const subAppReducer1 = (state = { subApp: {}}, action) => {
+export const subAppReducer1 = (state = { subApp: {}}, action) => {
   if (action.type === 'TEST') {
     return {
       ...state,
