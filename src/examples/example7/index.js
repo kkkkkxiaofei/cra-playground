@@ -1,21 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import FruitRoutes from './FruitProject/routes';
-import SchoolRoutes from './SchoolProject/routes';
+import { Link, Route } from 'react-router-dom';
+import FruitProject from './FruitProject';
+import SchoolProject from './SchoolProject';
 
-const Container = () => {
+const SubAppContainer = () => {
   return (
     <div>
       <div>
-        <Link to={'/examples/7/subapps/1'}>subapp1</Link>
+        <Link to={'/examples/7/subapps/fruit-project'}>FruitProject</Link>
       </div>
       <div>
-        <Link to={'/examples/7/subapps/2'}>subapp2</Link>
+        <Link to={'/examples/7/subapps/school-project'}>SchoolProject</Link>
       </div>
-      <FruitRoutes />
-      <SchoolRoutes />
+      <Route path={'/examples/7/subapps/fruit-project'} component={FruitProject} />
+      <Route path={'/examples/7/subapps/school-project'} component={SchoolProject} />
     </div>
   )
 }
 
-export default Container;
+export default SubAppContainer;

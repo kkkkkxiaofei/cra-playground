@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useRouteMatch, Route, Link } from 'react-router-dom';
+import { useRouteMatch, Route, Link, Switch } from 'react-router-dom';
 import Fruit from './Fruit';
 import { subAppReducer1 } from '../reducer';
 import { inject } from '../../../../store/storeManager';

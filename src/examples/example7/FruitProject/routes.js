@@ -4,8 +4,6 @@ import {
  } from 'react-router-dom';
 import Fruits from './components/Fruits';
 
-export default () => (
-  <Route path={`/examples/7/subapps/1`}>
-    <Fruits />
-  </Route>
+export default ({ prefix = '' }) => (
+  <Route path={`${prefix}/fruits`} component={Fruits} />
 );

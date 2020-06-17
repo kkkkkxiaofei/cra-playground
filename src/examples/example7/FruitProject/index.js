@@ -3,9 +3,9 @@ import { Provider } from 'react-redux';
 import { createStore, compose } from 'redux';
 import subAppReducer from './reducer';
 import {
-  BrowserRouter
+  BrowserRouter, Switch, Link, useRouteMatch, Route
  } from 'react-router-dom';
-import Route from './routes';
+import Fruits from './components/Fruits';
 
 const store = createStore(
   subAppReducer,
@@ -13,13 +13,14 @@ const store = createStore(
 );
 
 function SubApp() {
+  const { url, path } = useRouteMatch();
   return (
     <Provider store={store}>
-      <div>
-        this is subApp1
-      </div>
       <BrowserRouter>
-        <Route />
+        <Link to={`${url}/fruits`}>
+          Go to fruit project
+        </Link>
+        <Route path={`${path}/fruits`} component={Fruits} />
       </BrowserRouter>
     </Provider>
   );
