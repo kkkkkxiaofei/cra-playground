@@ -9,7 +9,7 @@ import Route from './routes';
 
 const store = createStore(
   subAppReducer,
-  compose(window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f)
+  compose(window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__({ name: 'FruitProject' }) : f => f)
 );
 
 function SubApp() {
