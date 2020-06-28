@@ -21,9 +21,12 @@
 它的基本思路具体如下：
 
 1.子应用(Child)有自己单独的repo,打包部署也是独立的
+
 2.Child需要在入口处暴露自己的生命周期函数，至少需要：bootstrap, mount, unmount
-2.Child打包后必须将自己的`asset-mainfest.json`暴露出来（里面包含了Child入口的bundle文件地址），里面的文件也必然是可被宿主(Host)访问的
-3.Host监听路由，发现需要加载Child时动态请求Child的mainfest并且将Child挂载到一个新的dom节点上（一般此处会有缓存，防止re-mount）
+
+3.Child打包后必须将自己的`asset-mainfest.json`暴露出来（里面包含了Child入口的bundle文件地址），里面的文件也必然是可被宿主(Host)访问的
+
+4.Host监听路由，发现需要加载Child时动态请求Child的mainfest并且将Child挂载到一个新的dom节点上（一般此处会有缓存，防止re-mount）
 
 这种方式其实是目前很多微前端的主流解决方案，基本上可以满足大部分的拆分和业务需求，老马之前在自己的博客里推荐的微前端的方案也如出一辙。
 
@@ -43,15 +46,112 @@ export const mount = container => render(<SubAppEntry />, container);
 注意，方案3可不是动态注入，是动态挂载，区别在于你加载的Child在逻辑和数据层面上是不是属于Host，显然方案3是独立的。所以此方案的主要是的方案3的基础上做如下调整(以React为例)：
 
 1.子应用(Child)有自己单独的repo,打包部署也是独立的
+
 2.~~Child需要在入口处暴露自己的生命周期函数，至少需要：bootstrap, mount, unmount~~
 Child不需要提供生命周期的钩子，只需要在入口处暴露自己的配置信息，如自己的reducers/store/routers...
-2.Child打包后必须将自己的`asset-mainfest.json`暴露出来（里面包含了Child入口的bundle文件地址），里面的文件也必然是可被宿主(Host)访问的
-3.Host监听路由，发现需要加载Child时动态请求Child的mainfest并且将~~Child挂载到一个新的dom节点上（一般此处会有缓存，防止re-mount~~
+
+3.Child打包后必须将自己的`asset-mainfest.json`暴露出来（里面包含了Child入口的bundle文件地址），里面的文件也必然是可被宿主(Host)访问的
+
+4.Host监听路由，发现需要加载Child时动态请求Child的mainfest并且将~~Child挂载到一个新的dom节点上（一般此处会有缓存，防止re-mount~~
 此处就是不挂载了，而是自己请求Child暴露出来的组件，这样天然的将Child和Host融为一体，你可以把Host的store传递给Child，更可以把Child里的reducer动态的注入的全局，当然你甚至可以把它当作方案3来用（即Child有自己的store，Host注入进来就不管了，就当它是一个简单的Component而已）
 
 读到这里，可能有一些细节需要解释，比如：
+
 1.这怎么听起来像是我们正常的开发方式呀，即一个project下有多个业务模块的folder,每个folder的index不就是所谓的Child的入口组件么，这本来就是一个应用呀，自然技术栈也是一样的，这怎么就微前端了？
-2.方案3里我们可以在全局变量（如window）上注入Child的生命周期函数，以此供Host调用，那这种方案里是如何远程请求一个组件的bundle文件并且注入到一个已经存在的React环境里呢（Host打包里的React实例必然和Child里的React实例不一致，就算版本一致也不一样）,这里有啥坑呢？
+
+这里面最重要的差别在于这种新的方案里没有子应用的代码，真正的开发代码是在远端其他仓库，因此并不会在一起编译，Host只需要配置一下如何去访问这些子应用即可。Host只是一个容器而已，文件结构如下：
+
+├── Host Project
+│   ├── index.js
+│   └── config.js
+
+`config.js`
+
+```
+export const subAppPath = `${subAppStorageDomain}/sub-main.js`;
+export const subAppModuleName = 'micro-app';
+```
+
+`subAppPath`为子应用入口的bundle文件地址，这里本应该写asset-mainfest.json的地址，请求成功后从资源信息里再找到主bundle文件的链接，这里省略了这一步。
+
+`subAppModuleName`为子应用主bundle打包的模块名称（后面会讲到）
+
+2.方案3里我们可以在全局变量（如window）上注入Child的生命周期函数，以此供Host调用，那在新的方案里是如何远程请求一个组件的bundle文件并且注入到一个已经存在的React环境里呢（Host打包里的React实例必然和Child里的React实例不一致，就算版本一致也不一样）,这里有啥坑呢？
+
+首先先看下子应用的结构：
+
+├── Child Project
+│   ├── index.js
+│   ├── components
+│   │    ├── AsyncDescription.js
+│   │    ├── User.js
+│   │    └── Product.js
+│   └── webpack.config.js
 
 
-TODO: complete the this readme
+`index.js`
+
+```
+import React from 'react';
+import User from './components/User';
+import Product from './components/Product';
+
+export const routes = [
+  {
+    path: '/user',
+    component: <User />
+  },
+  {
+    path: '/product',
+    component: <Product />
+  }
+];
+```
+
+子应用入口处只暴露自己的路由配置以及组件。
+
+`webpack.config.js`
+
+```
+var path = require('path');
+
+module.exports = {
+  entry: path.resolve(__dirname, 'index.js'),
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'sub-main.js',
+    library: 'micro-app',
+    libraryTarget: 'umd',
+    publicPath: 'http://domain/'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader'
+      }
+    ]
+  },
+  mode: 'development'
+};
+```
+
+重点说明下以下四个变量：
+
+filename: 一定程度上决定了打包后主bundle文件的名称，最好有一定规则好去管理
+
+library/libraryTarget: 正常情况下如果不设置这两个变量，webpack会按照var的方式去打包，这也是我们最常使用（可能你没注意到）模块加载方式。但是对于Host来说，如果用var的话就没有办法加载var返回的组件了，因此采用umd+模块名称（library)，如此打包后的产物就可以以名为`micro-app`的key来注册到全局window上（如果你在browser端使用的话）。
+
+publicPath: 默认情况下如果有代码分离的话，webpack会以根路径`/`来请求子bundle，但是由于这里我们是远程调用，所以如果子应用有代码分离的话，我们需要主bundle也能够知道远程子bundle的路径，这个变量就可以满足我们的需求。
+
+还有一点需要强调，若子应用使用到了Hook，那么你应该会发现一个这样的错误：
+
+`Breaking the Rules of Hooks`
+
+[详细的解释请看官网](https://reactjs.org/warnings/invalid-hook-call-warning.html)
+
+经过我的测试发现，子应用里的Hook是没办法在Host里使用的，最简单的解决办法就是子应用使用class component
+
+```
+
