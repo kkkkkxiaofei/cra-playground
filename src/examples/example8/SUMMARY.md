@@ -38,7 +38,7 @@ export const mount = container => render(<SubAppEntry />, container);
 
 如此一来，Child就和Host在逻辑和数据层面脱离了，当然了，你要是真愿意，你也可以让Child暴露更多更多的方法来让Host去管理自己（而不仅限于生命周期的钩子），倒也不是不行，可你真要是有十几个Child那工作量和维护难度可不是一般，这就是为什么我在缺点一项中说它比npm和iframe稍好，但是依然还是个缺点的原因。但还是那就话，如果你的Child真的没啥和Host交互的，此方案还是首选的（毕竟钩子函数是你自己写的呀，完全没有技术栈限制）
 
-4.动态注入
+4.动态注入(名字待定)
 
 优点：独立部署，独立开发，可与Host无缝交互，可满兼容上述三种方案
 缺点：技术栈需要统一
@@ -75,6 +75,46 @@ export const subAppModuleName = 'micro-app';
 `subAppPath`为子应用入口的bundle文件地址，这里本应该写asset-mainfest.json的地址，请求成功后从资源信息里再找到主bundle文件的链接，这里省略了这一步。
 
 `subAppModuleName`为子应用主bundle打包的模块名称（后面会讲到）
+
+有了这些配置，Host就可以这样加载远程组件：
+
+`index.js`
+
+```
+import { subAppPath, subAppModuleName } from './config';
+
+const HostContainer = () => {
+  const [routes, setRoutes] = useState(null);
+  const { path: basePath } = useRouteMatch();
+
+  const Children = useMemo(() => {
+    if (routes) {
+      return routes.map(({ path, component }) => (
+        <div>
+          <Link to={`${basePath}${path}`}>{path}</Link>
+          <Route path={`${basePath}${path}`} children={component} />
+        </div>
+      ))
+    }
+    return null;
+  }, [routes]);
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = subAppPath;
+    const onload = event => {
+      setRoutes(window[subAppModuleName].routes);//umd
+    }
+    script.onload = onload;
+    document.body.appendChild(script);
+  }, []);
+  return Children ? Children : <div>loading the routes of sub app</div>;
+};
+
+export default HostContainer;
+```
+
+原理很简单：将请求到的子应用模块以script的方式（解决跨域）加载到执行上下文中，由于子应用设置了打包策略（子应用的打包策略如下），因此可以直接访问该模块。
+
 
 2.方案3里我们可以在全局变量（如window）上注入Child的生命周期函数，以此供Host调用，那在新的方案里是如何远程请求一个组件的bundle文件并且注入到一个已经存在的React环境里呢（Host打包里的React实例必然和Child里的React实例不一致，就算版本一致也不一样）,这里有啥坑呢？
 
