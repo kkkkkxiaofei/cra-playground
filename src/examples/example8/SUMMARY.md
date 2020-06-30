@@ -193,5 +193,26 @@ publicPath: 默认情况下如果有代码分离的话，webpack会以根路径`
 
 经过我的测试发现，子应用里的Hook是没办法在Host里使用的，最简单的解决办法就是子应用使用class component
 
+
+最后，考虑到集成后打包大小的问题，子应用可以选择不打包一些公共依赖，让其以插件的方式在Host内引用，如react:
+
 ```
+externals: {
+  react: {
+    root: 'React',
+    umd: 'react',
+    commonjs2: 'react',
+    commonjs: 'react'
+  }
+}
+
+```
+
+如此只需要在Host内提供react即可:
+
+```
+<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+```
+
+这并不是必须的，是否真的需要这样，完全取决于你。
 
