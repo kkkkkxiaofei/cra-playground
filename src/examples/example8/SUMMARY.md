@@ -193,6 +193,7 @@ publicPath: 默认情况下如果有代码分离的话，webpack会以根路径`
 
 经过我的测试发现，子应用里的Hook是没办法在Host里使用的，最简单的解决办法就是子应用使用class component
 
+[补充：之后发现了这个问题的根本原因](https://overreacted.io/how-does-setstate-know-what-to-do/)
 
 最后，考虑到集成后打包大小的问题，子应用可以选择不打包一些公共依赖，让其以插件的方式在Host内引用，如react:
 
