@@ -10,18 +10,17 @@ const logger = () => {
 }
 const Parent = (props) => {
 	
-	const [visible, setVisible] = useState(_name);	
+	const [config, setConfig] = useState({ a: 1 });	
 	
 	logger();
-	const _visible = new Boolean(true);
 	return (
 		<div>
-			<div onClick={() => setVisible(_visible)}>
+			<div onClick={() => setConfig({ a:1 })}>
 				<h2>Hello pursue</h2>
 			</div>
 			<div>
 				<div>
-					<Child cb={cb} name={_name} />
+					<Child cb={cb} name={_name} config={config} />
 				</div>
 			</div>
 		</div>
