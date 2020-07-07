@@ -1,4 +1,9 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
+// import { createStore, combineReducers, compose, applyMiddleware } from '../real-libs';
+// import { createStore, combineReducers, compose, applyMiddleware } from '../libs';
+
+// import { createStore, combineReducers, compose, applyMiddleware } from '@dummmy/redux';
+
 import appReducer from '../reducer';
 import logger from '../middlewares/logger';
 import reporter from '../middlewares/reporter';
@@ -16,12 +21,21 @@ export const inject = ({ key, reducer }) => {
 export const getStore = () => {
   if (!store) {
     store = createStore(
-      appReducer, 
+      appReducer,
+      {}, 
       compose(
         applyMiddleware(reporter, logger),  
         window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__({ name: `cra-playground` }) : f => f
       )
     );
+    // const finalCreateStore = compose(
+    //   applyMiddleware(reporter, logger),  
+    //   window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__({ name: `cra-playground` }) : f => f
+    // )(createStore);
+    // store = finalCreateStore(
+    //   appReducer,
+    //   {}
+    // );
   }
   return store;
 };

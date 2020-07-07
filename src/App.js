@@ -6,8 +6,9 @@ import StaticRoutes from './routes/StaticRoutes';
 import { getStore } from './store/storeManager';
 
 function App() {
+  const store = getStore();
   return (
-    <Provider store={getStore()}>
+    <Provider store={store}>
       <div className="App">
         <BrowserRouter>
           <Suspense fallback={(<div>loading...</div>)}>
