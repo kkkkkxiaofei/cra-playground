@@ -1,5 +1,3 @@
-// import { combineReducers } from 'redux';
-// import { combineReducers } from '../../libs';
 import { combineReducers } from '@dummmy/redux';
 
 export const actionReducer = (state = '', action) => {

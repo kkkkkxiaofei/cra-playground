@@ -1,9 +1,14 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, useStore } from 'react-redux';
 import Fruit from './components/Fruit';
 
 const App = () => {
+  window.stores = window.stores || [];
+  const store = useStore();
+  window.stores.push(store);
   const dispatch = useDispatch();
+
+  
   const fruits = useSelector(state => state.app.fruits);
   return (
     <div>
