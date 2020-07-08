@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@dummmy/react-redux": "^1.0.4",
     "@dummmy/redux": "^1.0.4",
     "monaco-editor": "^0.20.0",
     "react": "^16.9.0",

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector, useDispatch, useStore } from 'react-redux';
+import { useSelector, useDispatch, useStore } from '@dummmy/react-redux';
 import Fruit from './components/Fruit';
 
 const App = () => {
@@ -8,7 +8,7 @@ const App = () => {
   window.stores.push(store);
   const dispatch = useDispatch();
 
-  
+
   const fruits = useSelector(state => state.app.fruits);
   return (
     <div>
