@@ -1,0 +1,1 @@
+1.integrate with DEV_TOOLS, don't know why failed to use this enhancer with dummmy redux
