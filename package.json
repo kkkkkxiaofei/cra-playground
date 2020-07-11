@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@dummmy/react-redux": "^1.0.4",
-    "@dummmy/redux": "^1.0.4",
+    "@dummmy/react-redux": "^1.0.5",
+    "@dummmy/redux": "^1.0.5",
     "monaco-editor": "^0.20.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
