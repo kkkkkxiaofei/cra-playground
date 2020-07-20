@@ -5,22 +5,35 @@ import Child from './Child';
 
 var _name = name;
 
+const childProps = {
+	name,
+	title: 'child title',
+	des: 'child des',
+	
+}
+
+const getProps = () => ({
+	name,
+	title: new String('child title'),
+	des: 'child des',
+})
+
 const logger = () => {
 	console.log('parent');
 }
 const Parent = (props) => {
 	
-	const [config, setConfig] = useState({ a: 1 });	
+	const [i, setI] = useState(0);	
 	
 	logger();
 	return (
 		<div>
-			<div onClick={() => setConfig({ a:1 })}>
-				<h2>Hello pursue</h2>
+			<div onClick={() => setI(i + 1)}>
+				<h2>Hello pursue{i}</h2>
 			</div>
 			<div>
 				<div>
-					<Child cb={cb} name={_name} config={config} />
+					<Child {...getProps()} />
 				</div>
 			</div>
 		</div>
