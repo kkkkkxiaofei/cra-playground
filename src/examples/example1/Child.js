@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { connect, shallowEqual } from 'react-redux';
+import { connect } from '../../libs';
 
 const _childName = 'childName';
-const Child = ({ name, title, des }) => {
+const Child = ({ name, title, des, send, info }) => {
   console.log('child');
   const [childName, setChildName] = useState('');
 	return (
@@ -16,12 +16,16 @@ const Child = ({ name, title, des }) => {
 			<div>
 				{`des: ${des}`}
 			</div>
+			<div>
+				{`info: ${info}`}
+			</div>
+			<button onClick={() => send()}>send</button>
 		</div>
 		
 	)
 }
 const mapStateToProps = state => ({
-	info: state.app,
+	info: state.app.data,
 	des: 'child des'
 });
 
@@ -36,12 +40,4 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => ({
 })
 
 // export default React.memo(Child, (prev, next) => prev.config == next.config);
-export default connect(mapStateToProps, mapDispatchToProps)(
-	React.memo(Child, (preProps, nextProps) => {
-		console.log(preProps.title == nextProps.title, preProps.title, nextProps.title)
-		return preProps.des === nextProps.des && 
-					preProps.info === nextProps.info &&
-					preProps.send === nextProps.send &&
-					preProps.title == nextProps.title
-	})
-);
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Child);
