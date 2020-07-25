@@ -22,9 +22,11 @@ const useSelector = (selector, equalFn = refEqual) => {
   });
 
   const check = () => {
-    if (equalFn(selectorState, selector(store.getState())))
+    const nextState = selector(store.getState());
+    if (equalFn(latestSelectorState.current, nextState))
       return;
     
+    latestSelectorState.current = nextState;  
     forceRender();
   }
 

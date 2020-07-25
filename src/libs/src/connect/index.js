@@ -42,15 +42,13 @@ const connect = (
       const usePure = pure ? useMemo : cb => cb();
 
       const actualFinalProps = usePure(() => {
-        console.log('use pure')
         return finalPropsSelector(ownProps);
       }, [ownProps, any]);
 
       useEffect(() => {
-        console.log('use effect')
         latestOwnProps.current = ownProps;
       });
-      console.log('force redner')
+      
       const check = () => {
         const finalPropsFromStoreUpdated = finalPropsSelector(latestOwnProps.current);
         if (finalPropsFromStoreUpdated !== actualFinalProps) {
@@ -58,6 +56,7 @@ const connect = (
         }
       };
 
+      //consider how many times the render will be invoked if there are nested connected component, need subscription?
       store.subscribe(check);
 
       return <WrappedComponent {...actualFinalProps} />
