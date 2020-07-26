@@ -20,7 +20,43 @@ const suspenseReducer = (state = {}, action)  => {
   return state;
 }
 
+const initStateOfExample3 = {
+  date: '12:48:48 PM',
+  products: []
+} 
+
+const reducerOfExample3 = (state = initStateOfExample3, action) => {
+  const { type, data } = action;
+  switch (type) {
+    case 'CHANGE_DATE': 
+      return { ...state, date: new Date().toLocaleTimeString()};
+    case 'ADD_PRODUCT': {
+      const { products } = state;
+      return { ...state, products: products.concat({ name: `name${products.length}`, price: 0, id: products.length, visitors: [] }) };
+    }
+    case 'REMOVE_PRODUCT': 
+      state.products.spilce(data, 1);
+      return { ...state, products: [...state.products] };
+    case 'ADD_PRICE': {
+      const products = state.products.map(product => {
+        return product.id === data ? { ...product, price: product.price + 1 } : product;
+      })
+      return { ...state, products }
+    }
+    case 'ADD_VISITOR': {
+      const products = state.products.map(product => {
+        const { visitors, id } = product;
+        const newVisitors = id === data ? visitors.concat(`visitor${visitors.length}`) : visitors;
+        return { ...product, visitors: newVisitors };
+      })
+      return { ...state, products }
+    }  
+    default: return state;
+  }
+}
+
 export default combineReducers({
   app: appReducer,
+  example3: reducerOfExample3,
   suspense: suspenseReducer
 })

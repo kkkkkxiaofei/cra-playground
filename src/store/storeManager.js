@@ -24,7 +24,7 @@ export const getStore = () => {
       appReducer,
       {}, 
       compose(
-        applyMiddleware(reporter, logger),  
+        // applyMiddleware(reporter, logger),  
         window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__({ name: `cra-playground` }) : f => f
       )
     );

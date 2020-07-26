@@ -1,45 +1,37 @@
 import React, { useState, useMemo } from 'react';
-import cb, { name } from './util';
-import Child from './Child';
+import { connect } from 'react-redux';
+import Wrapper from './Wrapper';
 
-
-var _name = name;
-
-const childProps = {
-	name,
-	title: 'child title',
-	des: 'child des',
-	
-}
-
-const getProps = () => ({
-	name,
-	title: new String('child title'),
-	des: 'child des',
-})
-
-const logger = () => {
-	console.log('parent');
-}
-const Parent = (props) => {
-	
-	const [i, setI] = useState(0);	
-	
-	logger();
+const Shopping = (props) => {
+	const { date, changeDate, createProduct, products } = props;
+	console.log('=====Shopping render=====');
 	return (
 		<div>
-			<div onClick={() => setI(i + 1)}>
-				<h2>Hello pursue{i}</h2>
+			<div>
+				<h2>Welcome to shop!{date}</h2>
+				<span onClick={changeDate}>change date</span>
 			</div>
 			<div>
-				<div>
-					<Child {...getProps()} />
-				</div>
+				<button onClick={createProduct}>create product</button>
 			</div>
+			<Wrapper products={products} />
 		</div>
 	);
 }
 
+const mapStateToProps = state => {
+	console.log('=====Shopping mapStateToProps=====');
+	return ({
+		date: state.example3.date,
+		products: state.example3.products
+	});
+}
 
+const mapDispatchToProps = dispatch => ({
+	changeDate: () => dispatch({ type: 'CHANGE_DATE'}),
+	createProduct: () => dispatch({ 
+		type: 'ADD_PRODUCT',
+	}),
+});
 
-export default Parent;
+export default connect(mapStateToProps, mapDispatchToProps)(Shopping);

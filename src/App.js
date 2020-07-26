@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
-// import { Provider } from 'react-redux';
-import { Provider } from '../src/libs';
+import { Provider } from 'react-redux';
+// import { Provider } from '../src/libs';
 import './App.css';
 import { BrowserRouter } from 'react-router-dom';
 import StaticRoutes from './routes/StaticRoutes';
