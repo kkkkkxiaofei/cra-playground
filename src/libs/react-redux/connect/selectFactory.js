@@ -2,8 +2,8 @@ const defaultMergeProps = (ownProps, stateProps, dispatchProps) =>
 ({...ownProps, ...stateProps, ...dispatchProps});
 
 export default (
-  mapStateToProps,
-  mapDispatchToProps,
+  mapStateToProps = () => ({}),
+  mapDispatchToProps = () => ({}),
   mergeProps = defaultMergeProps,
 ) => {
   return store => ownProps => {

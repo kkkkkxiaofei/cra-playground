@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { connect } from 'react-redux';
+import { connect } from 'libs';
 import Wrapper from './Wrapper';
 
 const Shopping = (props) => {

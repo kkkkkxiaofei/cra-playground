@@ -1,6 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect } from 'libs';
 import ProductList from './ProductList';
+import Sibling from './Sibling';
 
 const Container = props => {
   console.log('=====list container render=====');
@@ -9,6 +10,7 @@ const Container = props => {
     <div>
       <h2>container</h2>
       <ProductList products={products} />
+      <Sibling />
     </div>
   )
 };

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { connect } from 'react-redux';
+import { connect } from 'libs';
 
 const Product = ({ id, name, price, addPrice }) => {
 	console.log('=====product render=====');
@@ -22,4 +22,4 @@ const mapDispatchToProps = dispatch => ({
 	addPrice: (id) => dispatch({ type: 'ADD_PRICE', data: id})
 })
 
-export default connect(mapStateToProps, mapDispatchToProps, null)(Product);
+export default connect(mapStateToProps, mapDispatchToProps)(Product);

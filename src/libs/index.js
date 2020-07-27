@@ -1,1 +1,4 @@
-export * from './src'
+export { 
+  Provider,
+  connect
+ } from './react-redux';
