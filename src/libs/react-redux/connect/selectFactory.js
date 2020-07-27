@@ -5,6 +5,11 @@ export default (
   mapStateToProps = () => ({}),
   mapDispatchToProps = () => ({}),
   mergeProps = defaultMergeProps,
+  {
+    areOwnPropsEqual,
+    areStatePropsEqual,
+    areMergedPropsEqual
+  }
 ) => {
   return store => ownProps => {
     const state = store.getState();

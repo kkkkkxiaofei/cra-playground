@@ -17,14 +17,14 @@ function Subscription(store, parentSub) {
       self.onStateChange();
     }
   }
-  self.trySubScribe = function() {
+  self.trySubscribe = function() {
     if (!self.unSubscribe) {
-      self.unSubscribe = parentSub ? 
+      self.unSubscribe = self.parentSub ? 
         self.parentSub.subscribe(self.handleStateChange) :
         self.store.subscribe(self.handleStateChange);
     }
   }
-  
+
   return self;
 }
 
