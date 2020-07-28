@@ -42,7 +42,8 @@ const connect = (
   
   return WrappedComponent => {
     const ConnectFunction = ownProps => {
-      const { store, subscription: parentSub } = useContext(ReactReduxContext);
+      const contextValue = useContext(ReactReduxContext);
+      const { store, subscription: parentSub } = contextValue;
       const subscription = useMemo(() => {
         return new Subscription(store, parentSub)
       }, [store, parentSub]);
@@ -77,7 +78,18 @@ const connect = (
         subscription.trySubscribe();
       });
 
-      return <WrappedComponent {...actualFinalProps} />
+      const newContextValue = useMemo(() => {
+        return {
+          ...contextValue,
+          subscription 
+        } 
+      }, [contextValue, subscription]);
+
+      return (
+        <ReactReduxContext.Provider value={newContextValue}>
+          <WrappedComponent {...actualFinalProps} />
+        </ReactReduxContext.Provider>
+      );
     }
     return pure ? memo(ConnectFunction) : ConnectFunction;
   };

@@ -3,8 +3,8 @@ function Subscription(store, parentSub) {
   self.store = store;
   self.parentSub = parentSub;
   self.unSubscribe = null;
-  self.listeners = [];
   self.subscribe = function(listener) {
+    self.trySubscribe();
     self.listeners.push(listener);
     return () => self.listeners.splice(self.listeners.indexOf(listener), 1);
   };
@@ -22,9 +22,11 @@ function Subscription(store, parentSub) {
       self.unSubscribe = self.parentSub ? 
         self.parentSub.subscribe(self.handleStateChange) :
         self.store.subscribe(self.handleStateChange);
+      self.listeners = [];
     }
   }
 
+  
   return self;
 }
 
