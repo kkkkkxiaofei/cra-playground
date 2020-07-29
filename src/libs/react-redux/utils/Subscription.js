@@ -26,7 +26,8 @@ function Subscription(store, parentSub) {
     }
   }
 
-  
+  window.s = window.s || []
+  window.s.push(self);
   return self;
 }
 

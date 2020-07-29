@@ -1,4 +1,8 @@
 export default (A, B) => {
+  if (A === B) {
+    return true;
+  }
+
   if (typeof A !== 'object' || typeof B !== 'object') {
     return false;
   }
@@ -10,11 +14,5 @@ export default (A, B) => {
     return false;
   }
 
-  keysA.forEach(keyA => {
-    if (keysA[keyA] !== keysB[keyA]) {
-      return false;
-    }
-  })
-
-  return true;
-}
+  return !keysA.some(keyA => (A[keyA] !== B[keyA]) || !Object.hasOwnProperty.call(B, keyA));
+};

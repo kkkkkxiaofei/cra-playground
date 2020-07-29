@@ -34,6 +34,7 @@ const connect = (
     mapDispatchToProps,
     mergeProps,
     {
+      areStatesEqual,
       areOwnPropsEqual,
       areStatePropsEqual,
       areMergedPropsEqual
@@ -47,24 +48,32 @@ const connect = (
       const subscription = useMemo(() => {
         return new Subscription(store, parentSub)
       }, [store, parentSub]);
-      const finalPropsSelector = wrappedSelectFactory(store);
+      const finalPropsSelector = useMemo(() => {
+        return wrappedSelectFactory(store);
+      }, [store]);
       const [any, forceRender] = useReducer(i => i + 1, 0);
       const latestOwnProps = useRef(ownProps);
       const latestFinalProps = useRef();
       const latestfinalPropsFromStoreUpdated = useRef();
       const usePure = pure ? useMemo : cb => cb();
-
       const actualFinalProps = usePure(() => {
         if (latestfinalPropsFromStoreUpdated.current) {
           return latestfinalPropsFromStoreUpdated.current;
         }
-        return finalPropsSelector(ownProps);
+        return finalPropsSelector(store.getState(), ownProps);
       }, [ownProps, any, latestfinalPropsFromStoreUpdated]);
+      
+      useEffect(() => {
+        if (latestfinalPropsFromStoreUpdated.current) {
+          subscription.notify();
+        } else {
+          latestFinalProps.current = actualFinalProps;
+        }
+      });
 
-      useEffect(() => { 
+      useEffect(() => {
         const check = () => {
-          const newProps = finalPropsSelector(latestOwnProps.current);
-          console.log(newProps === latestFinalProps.current, newProps)
+          const newProps = finalPropsSelector(store.getState(), latestOwnProps.current);
           if (newProps === latestFinalProps.current) {
             subscription.notify();
           } else {
@@ -76,8 +85,8 @@ const connect = (
         };
         subscription.onStateChange = check;
         subscription.trySubscribe();
-      });
-
+      }, [subscription, latestOwnProps, latestFinalProps, latestfinalPropsFromStoreUpdated]);
+      
       const newContextValue = useMemo(() => {
         return {
           ...contextValue,
