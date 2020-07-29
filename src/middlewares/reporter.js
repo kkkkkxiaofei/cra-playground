@@ -1,10 +1,6 @@
-const logger = store => next => action => {
-  console.log('---suspense start---');
-  console.info('dispatching', action)
-  let result = next(action)
-  console.log('next state', store.getState())
-  console.log('---suspense end---');
-  return result;
+const reporter = store => next => action => {
+  console.log('---reporter middleware---');
+  return next(action);
 };
 
-export default logger;
+export default reporter;

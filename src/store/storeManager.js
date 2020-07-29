@@ -7,6 +7,7 @@ import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import appReducer from '../reducer';
 import logger from '../middlewares/logger';
 import reporter from '../middlewares/reporter';
+import thunk from '../middlewares/thunk';
 
 let store = null;
 
@@ -24,7 +25,7 @@ export const getStore = () => {
       appReducer,
       {}, 
       compose(
-        // applyMiddleware(reporter, logger),  
+        applyMiddleware(thunk, reporter, logger),
         window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__({ name: `cra-playground` }) : f => f
       )
     );

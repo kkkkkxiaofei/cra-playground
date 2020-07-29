@@ -28,7 +28,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-	changeDate: () => dispatch({ type: 'CHANGE_DATE'}),
+	changeDate: () => dispatch((state, dispatch) => dispatch({ type: 'CHANGE_DATE'})),
 	createProduct: () => dispatch({ 
 		type: 'ADD_PRODUCT',
 	}),
