@@ -85,6 +85,8 @@ const connect = (
         };
         subscription.onStateChange = check;
         subscription.trySubscribe();
+
+        check();
       }, [subscription, latestOwnProps, latestFinalProps, latestfinalPropsFromStoreUpdated]);
       
       const newContextValue = useMemo(() => {
