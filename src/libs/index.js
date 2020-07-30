@@ -1,4 +1,6 @@
 export { 
   Provider,
-  connect
+  connect,
+  useSelector,
+  useDispatch,
  } from './react-redux';
