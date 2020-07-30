@@ -1,38 +1,44 @@
-import { useContext, useRef, useEffect, useReducer } from 'react';
+import { useMemo, useContext, useRef, useEffect, useReducer } from 'react';
 import ReactReduxContext from '../components/ReactReduxContext';
+import Subscription from '../utils/Subscription';
 
 const refEqual = (a, b) => a === b;
 
 const useSelector = (selector, equalFn = refEqual) => {
-  const { store } = useContext(ReactReduxContext);
+  const { store, subscription: parentSub } = useContext(ReactReduxContext);
+  // const subscription = new Subscription()
   const storeState = store.getState();
   const latestSelector = useRef();
   const latestSelectorState = useRef();
-  let selectorState;
-
+  const selectorState = useMemo(() => 
+    selector(storeState), 
+    [selector, latestSelectorState.current]
+  );
+  const subscription = useMemo(() => 
+    new Subscription(store, parentSub),
+    [store, parentSub]
+  );
+  
   const [, forceRender] = useReducer(i => i + 1, 0);
-
-  if (selector !== latestSelector.current || selectorState !== latestSelectorState.current) {
-    selectorState = selector(storeState);
-  }
 
   useEffect(() => {
     latestSelector.current = selector;
     latestSelectorState.current = selectorState;
   });
 
-  const check = () => {
-    const nextState = selector(store.getState());
-    if (equalFn(latestSelectorState.current, nextState))
-      return;
+  useEffect(() => {
+    const check = () => {
+      const nextState = selector(store.getState());
+      if (!equalFn(latestSelectorState.current, nextState)) {
+        latestSelectorState.current = nextState;  
+        forceRender();
+      }
+    }
+    subscription.onStateChange = check;
+    subscription.trySubscribe();
     
-    latestSelectorState.current = nextState;  
-    forceRender();
-  }
-
-  store.subscribe(check);
-
-  check();
+    check();
+  }, [subscription, store, latestSelectorState.current])
 
   return selectorState;
 };
