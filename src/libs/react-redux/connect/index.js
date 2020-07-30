@@ -24,7 +24,6 @@ const connect = (
     areOwnPropsEqual = shallowEqual,
     areStatePropsEqual = shallowEqual,
     areMergedPropsEqual = shallowEqual,
-    ...extraOptions
   } = {}
 ) => {
 

@@ -22,7 +22,7 @@ export default (
     } else {
       const stateChanged = !areStatesEqual(nextState, state);
       const ownPropsChanged = !areOwnPropsEqual(nextOwnProps, ownProps);
-      
+      //todo: consider mapStateToProps, mapDispatchToProps depend on ownProps
       if (stateChanged) {
         const nextStateProps = mapStateToProps(nextState);
         const statePropsChanged = !areStatePropsEqual(nextStateProps, stateProps);
