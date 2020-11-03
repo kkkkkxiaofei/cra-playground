@@ -55,8 +55,28 @@ const reducerOfExample3 = (state = initStateOfExample3, action) => {
   }
 }
 
+const sagaReducer = (state = {}, action) => {
+  switch (action.type) {
+    case 'INCREMENT':{
+        // Add 1 to count
+        return Object.assign({}, state, { count: state.count + 1 });
+      }
+    case 'RECORD_USER':{
+        // Record some user data
+        const { result } = action;
+        return Object.assign(
+        {},
+        state,
+        { user: `NAME: ${result.name} GENDER: ${result.gender}` });
+
+      }
+    default:return state;}
+
+};
+
 export default combineReducers({
   app: appReducer,
   example3: reducerOfExample3,
-  suspense: suspenseReducer
+  suspense: suspenseReducer,
+  saga: sagaReducer
 })
