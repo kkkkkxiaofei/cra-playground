@@ -30,12 +30,12 @@ export const getStore = () => {
       appReducer,
       {}, 
       compose(
-        applyMiddleware(thunk, reporter, logger),
+        applyMiddleware(thunk, reporter, logger, sagaMiddleware),
         window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__({ name: `cra-playground` }) : f => f
       )
     );
 
-    // sagaMiddleware.run(rootSaga);
+    sagaMiddleware.run(rootSaga);
 
     // const finalCreateStore = compose(
     //   applyMiddleware(reporter, logger),  
