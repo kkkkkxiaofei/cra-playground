@@ -40,7 +40,10 @@ const companyRules = [
 ];
 
 const Demo6 = props => {
-  const { onSubmit = snapshot => console.log(snapshot), ...others } = props;
+  const onSubmit = snapshot => {
+    console.log(snapshot);
+    alert(JSON.stringify(snapshot));
+  }
   return (
     <div className={styles.container}>
       <Form 
@@ -48,7 +51,7 @@ const Demo6 = props => {
         initValidate={true} 
         Ok={<Ok name={'Submit'} />}
         Cancel={<Cancel name={'Cancel'} />}
-        {...others}
+        {...props.others}
       >
         <FormItem 
           rule={nameRules[0]} 

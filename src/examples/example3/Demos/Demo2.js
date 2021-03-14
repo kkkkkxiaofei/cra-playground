@@ -40,15 +40,17 @@ const companyRules = [
 ];
 
 const Demo2 = props => {
-  const { onSubmit = snapshot => console.log(snapshot), ...others } = props;
+  const onSubmit = snapshot => {
+     console.log(snapshot);
+     alert(JSON.stringify(snapshot));
+  }
   return (
     <div className={styles.container}>
       <Form 
         onSubmit={onSubmit} 
-        initValidate={true}
+        // initValidate={true}
         initValues={{ salary: 200 }}
         Ok={<Ok name={'Submit'} />}
-        {...others}
       >
         <FormItem 
           rule={nameRules[0]} 
