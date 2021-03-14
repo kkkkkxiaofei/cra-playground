@@ -21,7 +21,6 @@ const FieldWrapper = props => {
     initValues,
     inject,
   } = props;
-  const fieldRef = useRef();
   const [valueRecord, setValueRecord] = useState({ pre: '', current: initValues[uniqueKey] || '' });
   const [error, setError] = useState('');
   const validate = snapshot =>  {
@@ -47,7 +46,6 @@ const FieldWrapper = props => {
       value: { ...snapshot, [uniqueKey]: valueRecord.current },
       validator: validate,
       cb: setError,
-      fieldRef,
       reset: setValueRecord,
       impact: rule.impact,
       checkVisible: rule.checkVisible,
@@ -60,7 +58,6 @@ const FieldWrapper = props => {
     errorMessage, 
     onChange: handleOnChange,
     value: valueRecord.current,
-    fieldRef,
     disabled: !editable,
   });
 

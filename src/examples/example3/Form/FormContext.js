@@ -38,9 +38,8 @@ export const useFormContextData = (hookProps) => {
         const { validators } = context;
         Object.keys(validators)
             .forEach(key => {
-                const { fieldRef, reset } = validators[key];
+                const { reset } = validators[key];
                 reset({ pre: '', current: initValues[key] || '' });
-                fieldRef.current.value = initValues[key] || '';
             });
     };
 
